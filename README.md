@@ -1,3 +1,3 @@
 # CITS3404AgileWebDev
 
-test
+This is some information for the README file
