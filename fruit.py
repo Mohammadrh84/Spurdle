@@ -1,3 +1,3 @@
 def favourite_fruit():
-    x =1
+    x =2
     return favourite_fruit
