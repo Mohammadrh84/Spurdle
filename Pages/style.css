@@ -1,10 +1,30 @@
 @font-face {
     font-family: 'Syne-ExtraBold'; 
-    src: url('Assets/Syne-ExtraBold.ttf') format('ttf');
+    src: url('../Assets/Syne-ExtraBold.ttf') format('truetype');
     font-weight: extra-bold;
     font-style: normal;
 }
 
+:root {
+    --background-black: #07070c;
+    --neon-green: #3Dff6e;
+}
+
 body {
-    background-color: #242424;
+    background-color: var(--background-black);
+}
+
+h1 {
+    font-family: 'Syne-ExtraBold', sans-serif;
+    color: #FFFFFF;
+    text-align: center;
+    margin-top: 50px;
+}
+
+#first-half {
+    color: white
+}
+
+#second-half {
+    color: var(--neon-green)
 }
