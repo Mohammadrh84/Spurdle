@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Spurdle</title>
+
+        <link rel="stylesheet" href="style.css">
+
+        <script src="https://cdn.tailwindcss.com"></script>
+        <!-- Import custom configuration (fonts and colours)-->
+        <script src="../Scripts/tailwind-config.js"></script>
+    </head>
+
+    <body class="bg-background-black">
+        <div class="min-h-screen flex flex-col items-center justify-start pt-15 pb-32">
+            <h1 class="font-syne text-[125px] text-white text-center mt-[125px]">
+                <span class="text-white">spu</span><span class="text-neon-green">rdle</span>
+            </h1>
+            <p class="text-white text-xl">Select your favourite artists, guess their songs. The less hints you use,</p>
+            <p class="text-white text-xl">the more points you get.</p>
+
+            <!--Buttons, should redirect to either signup / login if user isnt logged in-->
+            <div class="flex flex-row gap-5 mt-8">
+                    <button class="bg-neon-green text-black px-6 py-3 rounded-lg hover:scale-105 hover:shadow-[0_0_10px_#3Dff6e] transition-all duration-200">
+                        Start playing
+                    </button>
+                    <button class="bg-white text-background-black px-6 py-3 rounded-lg hover:scale-105 transition-transform duration-200">
+                        Leaderboard
+                    </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-12 max-w-4xl">
+                    <div class="bg-card-black text-white p-6 rounded-xl text-left hover:-translate-y-1 border-2 border-grey transition-transform duration-200">
+                        <h3 class="text-l font-syne mb-2">Leaderboard</h3>
+                        <p>Compare your total points with your friends and all users.</p>
+                    </div>
+                    <div class="bg-card-black text-white p-6 rounded-xl text-left hover:-translate-y-1 border-2 border-grey transition-transform duration-200">
+                        <h3 class="text-l font-syne mb-2">5 Hints</h3>
+                        <p>You have 5 total hints to guess the song. The less, the better.</p>
+                    </div>
+                    <div class="bg-card-black text-white p-6 rounded-xl text-left hover:-translate-y-1 border-2 border-grey transition-transform duration-200">
+                        <h3 class="text-l font-syne mb-2">Song previews</h3>
+                        <p>Test how well you really know your favourite artists' music with short song snippets as the first hint.</p>
+                    </div>
+            </div>
+    </body>
+</html>
