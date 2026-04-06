@@ -3,11 +3,15 @@ tailwind.config = {
     extend: {
       colors: {
         'background-black': '#07070c',
-        'card-black': '#121219',
+        'card-black': '#191919',
         'neon-green': '#3Dff6e',
+        'input-gray': '#333333',
+        'input-border-gray': '#606060',
+        'placeholder-gray': '#BFBFBF',
       },
       fontFamily: {
         'syne': ['Syne-ExtraBold', 'sans-serif'],
+        'montserrat': ['Montserrat-VariableFont_wght', 'sans-serif'],
       }
     }
   }

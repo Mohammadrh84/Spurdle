@@ -1,39 +1,118 @@
 <!doctype html>
 <html>
   <head>
-    <title>Spurdle</title>
-    <link rel="stylesheet" href="style.css" />
-    <script src="../Scripts/script.js"></script>
-  </head>
+        <title>Spurdle</title>
 
-  <body class="user-auth-page">
-    <h1>
-      <span onclick="goToWelcome()" id="first-half">spu</span
-      ><span onclick="goToWelcome()" id="second-half">rdle</span>
-    </h1>
-      <div class="user-auth-box">
-        <div>
-          <h2>Sign Up Account</h2>
-          <h5>Enter your details below to create your account.</h5>
+        <link rel="stylesheet" href="style.css">
+
+        <script src="https://cdn.tailwindcss.com"></script>
+        <!-- Import custom configuration (fonts and colours)-->
+        <script src="../Scripts/tailwind-config.js"></script>
+        <script src="../Scripts/script.js"></script>
+    </head>
+
+  <body class="bg-background-black">
+    <div class="min-h-screen flex flex-col items-center">
+        <!-- Logo -->
+      <h1 class="font-syne text-[35px] text-white mt-[125px]">
+        <span onclick="goToWelcome()" class="text-white">spu</span
+        ><span onclick="goToWelcome()" class="text-neon-green">rdle</span>
+      </h1>
+      
+      <!-- Sign up box-->
+      <div class="w-full max-w-md bg-card-black border border-10px border-neon-green p-8 rounded-lg mt-10 ">
+        <div class="text-center text-white">
+          <h2 class="text-2xl font-bold ">Sign Up</h2>
+          <h5 class="text-md text-placeholder-gray">Enter your details below to create your account.</h5>
         </div>
-        <div class="montserrat-white">
+        <div class="text-white mt-6 flex flex-col gap-4">
           <div>
-            <label>Username</label>
-            <input type="text" placeholder="Username" />
+            <label class="text-sm tracking-[0.5px]">Username</label><br>
+            <input class="
+            w-full
+            bg-input-gray
+            text-white  
+            border 
+            border-input-border-gray
+            focus:outline-none 
+            focus:ring
+            focus:ring-neon-green
+            focus:ring-opacity-30
+            focus:neon-green 
+            focus:border-neon-green
+            py-2
+            px-4
+            rounded-lg
+            placeholder:text-placeholder-gray
+            " type="text" placeholder="Username"/>
           </div>
           <div>
-            <label>Email</label>
-            <input type="email" placeholder="Email" />
+            <label class="text-sm tracking-[0.5px]">Email</label><br>
+            <input class="
+            w-full
+            bg-input-gray
+            text-white  
+            border 
+            border-input-border-gray
+            focus:outline-none 
+            focus:ring
+            focus:ring-neon-green
+            focus:ring-opacity-30
+            focus:neon-green 
+            focus:border-neon-green
+            py-2
+            px-4
+            rounded-lg
+            placeholder:text-placeholder-gray
+            " type="email" placeholder="Email"/>
           </div>
           <div>
-            <label>Password</label>
-            <input type="password" placeholder="Password" />
+            <label class="text-sm tracking-[0.5px]">Password</label><br>
+            <input class="
+            w-full
+            bg-input-gray
+            text-white  
+            border 
+            border-input-border-gray
+            focus:outline-none 
+            focus:ring
+            focus:ring-neon-green
+            focus:ring-opacity-30
+            focus:neon-green 
+            focus:border-neon-green
+            py-2
+            px-4
+            rounded-lg
+            placeholder:text-placeholder-gray
+            " type="password" placeholder="•••••••••••"/>
           </div>
           <div>
-            <label>Confirm Password</label>
-            <input type="password" placeholder="Confirm Password" />
+            <label class="text-sm tracking-[0.5px]">Confirm Password</label><br>
+              <input class="
+              w-full
+              bg-input-gray
+              text-white  
+              border 
+              border-input-border-gray
+              focus:outline-none 
+              focus:ring
+              focus:ring-neon-green
+              focus:ring-opacity-30
+              focus:neon-green 
+              focus:border-neon-green
+              py-2
+              px-4
+              rounded-lg
+              placeholder:text-placeholder-gray
+              " type="password" placeholder="•••••••••••"/>
           </div>
-          <div><button>Sign up</button></div>
+          <div class="text-center">
+            <button class="bg-neon-green text-[#121219] font-bold py-2 px-6 rounded">Sign up</button>
+          </div>
+          <div class="text-center text-white">
+          <h5 class="text-sm text-gray-400">Already have an account? <a href="#" class="text-neon-green hover:underline">Log in.</a></h5>
+        </div>
+        </div>
         </div>
       </div>
   </body>
