@@ -2,5 +2,5 @@ function test() {
     alert("test");
 }
 function goToWelcome() {
-    window.location.href = "./welcome.html";
+    window.location.href = "/pages/welcome.html";
 }
