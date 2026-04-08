@@ -50,6 +50,7 @@ async function GetRandomSong () {
 
     console.log("Random song details:", songDeets);
     document.getElementById('result').textContent = JSON.stringify(songDeets, null, 2);
+    document.getElementById('album-cover').src = randomSong.artworkUrl100.replace('100x100', '600x600');
 }
 
 
