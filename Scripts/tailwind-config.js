@@ -11,7 +11,7 @@ tailwind.config = {
       },
       fontFamily: {
         'syne': ['Syne-ExtraBold', 'sans-serif'],
-        'montserrat': ['Montserrat-VariableFont_wght', 'sans-serif'],
+        'montserrat': ['Montserrat', 'sans-serif'],
       }
     }
   }

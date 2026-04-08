@@ -6,8 +6,8 @@
 }
 
 @font-face {
-    font-family: 'Monsterrat'; 
+    font-family: 'Montserrat';
     src: url('../Assets/Montserrat-VariableFont_wght.ttf') format('truetype');
-    font-weight: normal;
+    font-weight: 100 900;
     font-style: normal;
 }
