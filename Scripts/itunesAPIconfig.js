@@ -35,9 +35,8 @@ async function GetArtistSongs(randomArtist) {
 
 async function GetRandomSong () {
     const randomArtistName = listOfArtists[Math.floor(Math.random() * listOfArtists.length)];
+    cacheArtistName = randomArtistName;
     const randomArtistId = await GetArtistIdName(randomArtistName);
-    console.log("Artist name:", randomArtistName);
-    console.log("Artist ID:", randomArtistId);
     await GetArtistSongs(randomArtistId);
     const randomSong = listOfSongs[Math.floor(Math.random() * listOfSongs.length)];
     const songDeets = {
