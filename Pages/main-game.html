@@ -23,7 +23,7 @@
                 <div class="bg-card-black rounded-[24px] border border-white/10 bg-white/5 p-5 ">
                     <!-- POINTS HEADER-->
                     <section class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-4 md:p-6">
-                        <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between">
+                        <div class="flex flex-col ">
                             <div class="w-full">
                                 <div class="flex items-center justify-between w-full">
                                     <p class="text-sm uppercase tracking-[0.35em] text-white/80">points remaining</p>
@@ -62,11 +62,11 @@
                 <div class="bg-card-black rounded-[24px] border border-white/10 bg-white/5 p-5 ">
                     <!-- HINT HEADER -->
                     <section class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-4 md:p-6">
-                        <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+                        <div class="flex flex-col gap-4 ">
                             <div>
                                 <div class="flex items-center justify-between w-full">
                                     <p class="text-sm uppercase tracking-[0.35em] text-neon-green/80">Hint</p>
-                                    <p class="text-sm uppercase tracking-[0.35em] text-neon-green/80">0 / 5 Revealed</p>
+                                    <span id="hints-revealed" class="text-sm font-bold uppercase tracking-[0.35em] text-neon-green/80"></span>
                                 </div>
                                 <p id="hint-description"
                                     class="mt-4 max-w-2xl text-sm leading-6 text-white/70 md:text-base">
@@ -77,8 +77,8 @@
                     </section>
                     <!-- HINT 1-->
                     <section id="section-1-hidden"
-                        class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] py-2 px-4 md:p-6">
-                        <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+                        class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-6">
+                        <div class="flex flex-col gap-4 ">
                             <div class="flex items-center justify-between w-full">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white">Release date</p>
                                 <div class="rounded-full border border-[#ff4a6e]/50 bg-[#ff4a6e1f] p-2">
@@ -92,7 +92,7 @@
                     <!-- HINT 1 Revealed-->
                     <section id="section-1-hint"
                         class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] py-2 px-4 md:p-6 hidden">
-                        <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+                        <div class="flex flex-col gap-4 ">
                             <div class="flex items-center justify-between w-full">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white">Release date</p>
                                 <div class="rounded-full border border border-neon-green/20 bg-neon-green/5 p-2">
@@ -105,9 +105,8 @@
                         </div>
                     </section>
                     <!-- HINT 2-->
-                    <section id="section-2-hidden"
-                        class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] py-2 px-4 md:p-6">
-                        <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+                    <section id="section-2-hidden" class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-6">
+                        <div class="flex flex-col gap-4 ">
 
                             <div class="flex items-center justify-between w-full">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white">Album cover</p>
@@ -121,9 +120,8 @@
                         </div>
                     </section>
                     <!-- HINT 2 Revealed-->
-                    <section id="section-2-hint"
-                        class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] py-2 px-4 md:p-6 hidden">
-                        <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+                    <section id="section-2-hint" class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-6 hidden">
+                        <div class="flex flex-col gap-4">
                             <div class="flex items-center justify-between w-full">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white">Album cover</p>
                                 <div class="rounded-full border border border-neon-green/20 bg-neon-green/5 p-2">
@@ -139,9 +137,8 @@
                         </div>
                     </section>
                     <!-- HINT 3-->
-                    <section id="section-3-hidden"
-                        class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] py-2 px-4 md:p-6">
-                        <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+                    <section id="section-3-hidden" class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-6">
+                        <div class="flex flex-col gap-4 ">
 
                             <div class="flex items-center justify-between w-full">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white">album name</p>
@@ -155,9 +152,8 @@
                         </div>
                     </section>
                     <!-- HINT 3 Revealed-->
-                    <section id="section-3-hint"
-                        class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] py-2 px-4 md:p-6 hidden">
-                        <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+                    <section id="section-3-hint" class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-6 hidden">
+                        <div class="flex flex-col gap-4 ">
                             <div class="flex items-center justify-between w-full">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white">letter reveal</p>
                                 <div class="rounded-full border border border-neon-green/20 bg-neon-green/5 p-2">
@@ -196,8 +192,8 @@
                         </div>
                     </section>
                     <!-- HINT 4-->
-                    <section class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] py-2 px-4 md:p-6">
-                        <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+                    <section id="section-4-hidden" class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-6">
+                        <div class="flex flex-col gap-4 ">
 
                             <div class="flex items-center justify-between  w-full">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white">Album name</p>
@@ -211,9 +207,8 @@
                         </div>
                     </section>
                     <!-- HINT 4 Revealed-->
-                    <section id="section-1-hint"
-                        class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] py-2 px-4 md:p-6 hidden">
-                        <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+                    <section id="section-4-hint" class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-6 hidden">
+                        <div class="flex flex-col gap-4 ">
                             <div class="flex items-center justify-between w-full">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white">Album name</p>
                                 <div class="rounded-full border border border-neon-green/20 bg-neon-green/5 p-2">
@@ -226,8 +221,8 @@
                         </div>
                     </section>
                     <!-- HINT 5-->
-                    <section class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] py-2 px-4 md:p-6">
-                        <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+                    <section id="section-5-hidden" class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-6">
+                        <div class="flex flex-col gap-4 ">
 
                             <div class="flex items-center justify-between w-full">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white">song snippet</p>

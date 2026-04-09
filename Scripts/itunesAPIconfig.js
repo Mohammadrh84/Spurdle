@@ -148,10 +148,10 @@ let currentHint = 0;
 
 function NextHint() {
     if (currentHint >= 5) return;
-
     hintSections[currentHint].hidden.classList.add('hidden');
     hintSections[currentHint].hint.classList.remove('hidden');
     currentHint++;
+    document.getElementById('hints-revealed').textContent = `${currentHint} / 5 Revealed`;
 }
 
 async function checkLetters() {
