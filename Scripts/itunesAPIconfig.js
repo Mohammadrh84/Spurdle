@@ -2,6 +2,7 @@ let cacheArtistID = null;
 let cacheArtistName = null;
 const listOfArtists = ["Taylor swift", "Ed Sheeran", "Adele", "Drake", "Beyoncé", "The Weeknd", "Billie Eilish", "Bruno Mars", "Ariana Grande", "Justin Bieber"];
 let listOfSongs = [];
+let cacheSongDeets = null;
 
 async function GetArtistIdName(artistName) {
     const searchForArtistUrl = `https://itunes.apple.com/search?term=${encodeURIComponent(artistName)}&entity=musicArtist&limit=1`;
@@ -67,6 +68,7 @@ async function GetRandomSong() {
         genre: randomSong.primaryGenreName,
         previewUrl: randomSong.previewUrl,
     };
+    cacheSongDeets = songDeets;
 
     console.log("Random song details:", songDeets);
     document.getElementById('result').textContent = JSON.stringify(songDeets, null, 2);
@@ -76,4 +78,42 @@ async function GetRandomSong() {
         document.getElementById('artist-image').src = imageUrl;
     });
 }
+
+function filterSongName(name) {
+    return name
+        .replace(/\(.*?\)/g, '')
+        .replace(/\[.*?\]/g, '')
+        .replace(/\{.*?\}/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+async function isSongCorrect(Guess) {
+    const filteredSong = filterSongName(cacheSongDeets.trackName).toLowerCase();
+    const filteredGuess = filterSongName(Guess).toLowerCase();
+
+    return filteredGuess === filteredSong;
+}
+
+document.getElementById('guess-button').addEventListener('click', async function() {
+    const userGuess = document.getElementById('guess-input').value;
+    const container = document.getElementById('guess-feedback-container');
+    const result = await isSongCorrect(userGuess);
     
+    if (!userGuess) return;
+
+    const p = document.createElement('p');
+    
+    p.classList.add("mt-1", "text-sm", "rounded-full", "py-2", "px-4");
+
+    if (result) {
+        p.textContent = "✓  " + userGuess;
+        p.className = "mt-1 text-sm rounded-full py-2 px-4 text-neon-green bg-neon-green/5 border border-neon-green/20";
+    } else {
+        p.textContent = "✕  " + userGuess;
+        p.className = "mt-1 text-sm rounded-full py-2 px-4 text-[#ff4a6e] border border-[#ff4a6e]/50 bg-[#ff4a6e1f]";
+    }
+
+    container.appendChild(p);
+    document.getElementById('guess-input').value = "";
+});
