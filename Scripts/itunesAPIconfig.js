@@ -70,6 +70,7 @@ async function GetRandomSong() {
 
     console.log("Random song details:", songDeets);
     document.getElementById('result').textContent = JSON.stringify(songDeets, null, 2);
+    document.getElementById('artist-name').textContent = songDeets.artistName;
 
     GetArtistImage(randomArtistName).then(imageUrl => {
         document.getElementById('artist-image').src = imageUrl;
