@@ -57,41 +57,50 @@ document.addEventListener('DOMContentLoaded', async function() {
 }
 });
 
-async function GetRandomSong() {
-    const randomArtistName = listOfArtists[Math.floor(Math.random() * listOfArtists.length)];
-    cacheArtistName = randomArtistName;
-    const randomArtistId = await GetArtistIdName(randomArtistName);
-    await GetArtistSongs(randomArtistId);
-    const randomSong = listOfSongs[Math.floor(Math.random() * listOfSongs.length)];
-    const songDeets = {
-        artistName: randomSong.artistName,
-        albumName: randomSong.collectionName,
-        trackName: randomSong.trackName,
-        releaseDate: randomSong.releaseDate,
-        genre: randomSong.primaryGenreName,
-        SongPreview: randomSong.previewUrl,
-        AlbumCover: randomSong.artworkUrl100,
-    };
-    cacheSongDeets = songDeets;
-    snippetStartTime = Math.floor(Math.random() * (28));
-    document.getElementById('artist-name').textContent = songDeets.artistName;
+async function GetRandomSong(TryAgainNumber = 5) {
+    try {
+        const randomArtistName = listOfArtists[Math.floor(Math.random() * listOfArtists.length)];
+        cacheArtistName = randomArtistName;
+        const randomArtistId = await GetArtistIdName(randomArtistName);
+        await GetArtistSongs(randomArtistId);
+        const randomSong = listOfSongs[Math.floor(Math.random() * listOfSongs.length)];
 
-    //HINTS
-    document.getElementById('release-date').textContent = new Date(songDeets.releaseDate).toLocaleDateString('en-GB', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-    });
-    document.getElementById('album-cover').src = songDeets.AlbumCover;
-    document.getElementById('album-name').textContent = songDeets.albumName;
+        const songDeets = {
+            artistName: randomSong.artistName,
+            albumName: randomSong.collectionName,
+            trackName: randomSong.trackName,
+            releaseDate: randomSong.releaseDate,
+            genre: randomSong.primaryGenreName,
+            SongPreview: randomSong.previewUrl,
+            AlbumCover: randomSong.artworkUrl100,
+        };
+        cacheSongDeets = songDeets;
+        snippetStartTime = Math.floor(Math.random() * (28));
+        document.getElementById('artist-name').textContent = songDeets.artistName;
 
-    GetArtistImage(randomArtistName).then(imageUrl => {
-        document.getElementById('artist-image').src = imageUrl;
-    });
+        //HINTS
+        document.getElementById('release-date').textContent = new Date(songDeets.releaseDate).toLocaleDateString('en-GB', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+        document.getElementById('album-cover').src = songDeets.AlbumCover;
+        document.getElementById('album-name').textContent = songDeets.albumName;
 
-    for (let i = 0; i < songDeets.trackName.length; i++) {
-        lettersInSong.push(songDeets.trackName[i].toLowerCase());
+        GetArtistImage(randomArtistName).then(imageUrl => {
+            document.getElementById('artist-image').src = imageUrl;
+        });
+
+        for (let i = 0; i < songDeets.trackName.length; i++) {
+            lettersInSong.push(songDeets.trackName[i].toLowerCase());
+        }
+    } catch (error) {
+        if (TryAgainNumber > 0) {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            return GetRandomSong(TryAgainNumber - 1);
+        }
     }
+
 }
 
 function filterSongName(name) {
@@ -126,7 +135,6 @@ document.getElementById('guess-button').addEventListener('click', async function
     if (result) {
         p.textContent = "✓  " + userGuess;
         p.className = "mt-1 text-sm rounded-full py-2 px-4 text-neon-green bg-neon-green/5 border border-neon-green/20";
-        //console.log("Correct guess!");
     } else {
         p.textContent = "✕  " + userGuess;
         p.className = "mt-1 text-sm rounded-full py-2 px-4 text-[#ff4a6e] border border-[#ff4a6e]/50 bg-[#ff4a6e1f]";
