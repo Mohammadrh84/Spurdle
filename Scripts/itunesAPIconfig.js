@@ -3,6 +3,9 @@ let cacheArtistName = null;
 const listOfArtists = ["Taylor swift", "Ed Sheeran", "Adele", "Drake", "Beyoncé", "The Weeknd", "Billie Eilish", "Bruno Mars", "Ariana Grande", "Justin Bieber"];
 let listOfSongs = [];
 let cacheSongDeets = null;
+let lettersInSong = [];
+let lettersCorrect = [];
+let lettersWrong = [];
 
 async function GetArtistIdName(artistName) {
     const searchForArtistUrl = `https://itunes.apple.com/search?term=${encodeURIComponent(artistName)}&entity=musicArtist&limit=1`;
@@ -71,9 +74,10 @@ async function GetRandomSong() {
     };
     cacheSongDeets = songDeets;
 
-    console.log("Random song details:", songDeets);
     document.getElementById('result').textContent = JSON.stringify(songDeets, null, 2);
     document.getElementById('artist-name').textContent = songDeets.artistName;
+
+    //HINTS
     document.getElementById('release-date').textContent = new Date(songDeets.releaseDate).toLocaleDateString('en-GB', {
         day: 'numeric',
         month: 'long',
@@ -84,6 +88,10 @@ async function GetRandomSong() {
     GetArtistImage(randomArtistName).then(imageUrl => {
         document.getElementById('artist-image').src = imageUrl;
     });
+
+    for (let i = 0; i < songDeets.trackName.length; i++) {
+        lettersInSong.push(songDeets.trackName[i].toLowerCase());
+    }
 }
 
 function filterSongName(name) {
@@ -104,10 +112,12 @@ async function isSongCorrect(Guess) {
 
 document.getElementById('guess-button').addEventListener('click', async function() {
     const userGuess = document.getElementById('guess-input').value;
+    if (!userGuess) return;
+    
     const container = document.getElementById('guess-feedback-container');
     const result = await isSongCorrect(userGuess);
     
-    if (!userGuess) return;
+    await checkLetters();
 
     const p = document.createElement('p');
     
@@ -141,4 +151,31 @@ function NextHint() {
     hintSections[currentHint].hidden.classList.add('hidden');
     hintSections[currentHint].hint.classList.remove('hidden');
     currentHint++;
+}
+
+async function checkLetters() {
+    const userGuess = document.getElementById('guess-input').value;
+    if (!userGuess) return;
+
+    const filteredSong = filterSongName(cacheSongDeets.trackName).toLowerCase();
+    const filteredGuess = filterSongName(userGuess).toLowerCase();
+
+
+    for (let i = 0; i < filteredGuess.length; i++) {
+        const letterElement = document.getElementById(`letter-${filteredGuess[i].toUpperCase()}`);
+        if (!letterElement) continue;
+        if (lettersCorrect.includes(filteredGuess[i]) || lettersWrong.includes(filteredGuess[i])) {
+            continue;
+        } else {
+            if (lettersInSong.includes(filteredGuess[i])) {
+                lettersCorrect.push(filteredGuess[i]);
+                letterElement.classList.remove('text-white/80');
+                letterElement.classList.add('text-neon-green');
+            } else {
+                lettersWrong.push(filteredGuess[i]);
+                letterElement.classList.remove('text-white/80');
+                letterElement.classList.add('text-[#ff4a6e]');
+            }
+        }
+    }
 }
