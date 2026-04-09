@@ -1,37 +1,170 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Spurdle</title>
 
-        <link rel="stylesheet" href="style.css">
+<head>
+    <title>Spurdle</title>
 
-        <script src="https://cdn.tailwindcss.com"></script>
-        <!-- Import custom configuration (fonts and colours)-->
-        <script src="../Scripts/tailwind-config.js"></script>
-        <script src="../Scripts/script.js"></script>
-        <script src="../Scripts/itunesAPIconfig.js"></script>
-    </head>
-    
-    <!-- Main game -->
-    <body>
-        <!-- (THIS IS FOR THE MUSIC SELECT PAGE) user input for artist name and search button -->
-            <!-- autofill -->
-            <!-- add to a list-->
-        
-        <!-- on start game/page load -->
-            <!-- go through list -->
-                <!-- search for artist(s) -->
-                    <!-- store artist info in a list-->
-                        <!-- choose an artist at random -->
-                            <!-- get a list of newest 200 songs -->
-                                <!-- choose a song at random -->
-                                    <!-- get the song's name and album cover -->
-                                        <!-- store album cover for a hint -->
-                                            
+    <link rel="stylesheet" href="style.css">
 
-        
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Import custom configuration (fonts and colours)-->
+    <script src="../Scripts/tailwind-config.js"></script>
+    <script src="../Scripts/script.js" defer></script>
+    <script src="../Scripts/itunesAPIconfig.js" defer></script>
+</head>
+
+<!-- Main game -->
+
+<body class="bg-background-black backdrop-blur-[100px] bg-cover bg-center bg-no-repeat">
+    <main class="min-h-screen px-4 py-6 md:px-8 lg:px-12">
+        <div class="mx-auto max-w-6xl">
+            <section class="mt-6 grid gap-4 md:grid-cols-2">
+                <!-- GUESSING SECTION -->
+                <div class="bg-card-black rounded-[24px] border border-white/10 bg-white/5 p-5 ">
+                    <section class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-4 md:p-6">
+                        <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between">
+                            <div class="w-full">
+                                <div class="flex items-center justify-between w-full">
+                                    <p class="text-sm uppercase tracking-[0.35em] text-white/80">points remaining</p>
+                                    <p class="text-sm font-bold uppercase tracking-[0.35em] text-neon-green/80">100</p>
+                                </div>
+                            </div>
+                            <!-- <div class="grid gap-3 md:hidden"></div> -->
+                    </section>
+                    <section class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] md:p-6">
+                        <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+                            <div class="w-full">
+                                <div class="flex items-center justify-between w-full">
+                                    <p class="text-sm uppercase tracking-[0.35em] text-white/80">Artist</p>
+                                    <img id="" src="" class="">
+                                </div>
+                            </div>
+                            <div class="mt-5 grid gap-3">
+                                <img id="artist-image" src="" alt="Artist" class="w-full rounded-xl">
+                                
+                            </div>
+                            
+                        </div>
+                        <div>
+                            <pre id="result"></pre>
+                        </div>
+                    </section>
+                </div>
+                <!-- HINT SECTION -->
+                <div class="bg-card-black rounded-[24px] border border-white/10 bg-white/5 p-5 ">
+                    <!-- HINT HEADER -->
+                    <section class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-4 md:p-6">
+                        <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+                            <div>
+                                <div class="flex items-center justify-between w-full">
+                                    <p class="text-sm uppercase tracking-[0.35em] text-neon-green/80">Hint</p>
+                                    <p class="text-sm uppercase tracking-[0.35em] text-neon-green/80">0 / 5 Revealed</p>
+                                </div>
+                                <p id="hint-description"
+                                    class="mt-4 max-w-2xl text-sm leading-6 text-white/70 md:text-base">
+                                    Feeling lost? You can use hints to help you guess the song, but be careful - they
+                                    will reduce your points!
+                                </p>
+                            </div>
+                    </section>
+                    <!-- HINT 1-->
+                    <section class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] py-2 px-4 md:p-6 ">
+                        <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+                            <div class="flex items-center justify-between w-full">
+                                <p class="text-xs uppercase tracking-[0.35em] text-white">Artist</p>
+                                <div class="rounded-full border border-white/10 bg-[#ff4a6e1f] p-2">
+                                    <p id="artist-name-revealed"
+                                        class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] px-2">Not revealed</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </section>
+                    <!-- HINT 2-->
+                    <section class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] py-2 px-4 md:p-6">
+                        <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+
+                            <div class="flex items-center justify-between w-full">
+                                <p class="text-xs uppercase tracking-[0.35em] text-white">letter reveal</p>
+                                <div class="rounded-full border border-white/10 bg-[#ff4a6e1f] p-2">
+                                    <p id="album-cover-revealed"
+                                        class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] px-2">Not revealed</p>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </section>
+                    <!-- HINT 3-->
+                    <section class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] py-2 px-4 md:p-6">
+                        <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+
+                            <div class="flex items-center justify-between w-full">
+                                <p class="text-xs uppercase tracking-[0.35em] text-white">album name</p>
+                                <div class="rounded-full border border-white/10 bg-[#ff4a6e1f] p-2">
+                                    <p id="album-cover-revealed"
+                                        class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] px-2">Not revealed</p>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </section>
+                    <!-- HINT 4-->
+                    <section class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] py-2 px-4 md:p-6">
+                        <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+
+                            <div class="flex items-center justify-between  w-full">
+                                <p class="text-xs uppercase tracking-[0.35em] text-white">Album cover</p>
+                                <div class="rounded-full border border-white/10 bg-[#ff4a6e1f] p-2">
+                                    <p id="album-cover-revealed"
+                                        class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] px-2">Not revealed</p>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </section>
+                    <!-- HINT 5-->
+                    <section class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] py-2 px-4 md:p-6">
+                        <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+
+                            <div class="flex items-center justify-between w-full">
+                                <p class="text-xs uppercase tracking-[0.35em] text-white">song snippet</p>
+                                <div class="rounded-full border border-white/10 bg-[#ff4a6e1f] p-2">
+                                    <p id="album-cover-revealed"
+                                        class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] px-2">Not revealed</p>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </section>
+                    <section>
+                        <button
+                            class="mt-4 w-full bg-[#3dff6e38] text-[#3dff6e] border border-white/10 py-3 px-4 rounded-[28px] hover:shadow-[0_0_10px_#3Dff6e] transition-all duration-20">
+                            Reveal Hint
+                        </button>
+                    </section>
+                </div>
+    </main>
+
+    <!-- on start game/page load -->
+    <!-- go through list -->
+    <!-- search for artist(s) -->
+    <!-- store artist info in a list-->
+    <!-- choose an artist at random -->
+    <!-- get a list of newest 200 songs -->
+    <!-- choose a song at random -->
+    <!-- get the song's name and album cover -->
+    <!-- store album cover for a hint -->
+
+
+    <!--
         <button onclick="GetRandomSong()">Search</button>
         <pre id="result"></pre>
         <img id="album-cover" src="">
-    </body>
+    -->
+</body>
+
 </html>

@@ -1,6 +1,6 @@
 let cacheArtistID = null;
 let cacheArtistName = null;
-const listOfArtists = ["Drake"];
+const listOfArtists = ["Taylor swift", "Ed Sheeran", "Adele", "Drake", "Beyoncé", "The Weeknd", "Billie Eilish", "Bruno Mars", "Ariana Grande", "Justin Bieber"];
 let listOfSongs = [];
 
 async function GetArtistIdName(artistName) {
@@ -28,12 +28,32 @@ async function GetArtistSongs(randomArtist) {
     listOfSongs = [];
 
     await filterSongs(songsInJSON, randomArtist);
-
-
-
 }
 
-async function GetRandomSong () {
+async function GetArtistImage(randomArtistName) {
+    try {
+        const url = `https://www.theaudiodb.com/api/v1/json/2/search.php?s=${encodeURIComponent(randomArtistName)}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        return data.artists?.[0]?.strArtistThumb ?? "";
+    } catch (err) {
+        console.error("Failed to fetch artist image:", err);
+        return "";
+    }
+}
+
+
+
+document.addEventListener('DOMContentLoaded', async function() {
+    try {
+    const test = await GetRandomSong();
+    console.log("Random song fetched on page load:", test);
+    } catch (error) {
+        console.error("Error occurred while fetching random song:", error);
+}
+});
+
+async function GetRandomSong() {
     const randomArtistName = listOfArtists[Math.floor(Math.random() * listOfArtists.length)];
     cacheArtistName = randomArtistName;
     const randomArtistId = await GetArtistIdName(randomArtistName);
@@ -45,13 +65,14 @@ async function GetRandomSong () {
         trackName: randomSong.trackName,
         releaseDate: randomSong.releaseDate,
         genre: randomSong.primaryGenreName,
-        previewUrl: randomSong.previewUrl
-    }
+        previewUrl: randomSong.previewUrl,
+    };
 
     console.log("Random song details:", songDeets);
     document.getElementById('result').textContent = JSON.stringify(songDeets, null, 2);
-    document.getElementById('album-cover').src = randomSong.artworkUrl100.replace('100x100', '600x600');
+
+    GetArtistImage(randomArtistName).then(imageUrl => {
+        document.getElementById('artist-image').src = imageUrl;
+    });
 }
-
-
     
