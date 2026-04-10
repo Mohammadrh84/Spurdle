@@ -6,6 +6,14 @@ const startButton = document.getElementById("startButton");
 
 const chosenArtists = [];
 
+// 'debounce' function to avoid spamming the API when refreshing search results
+function debounce(func, timeout = 400) {
+    let timer;
+    return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => { func.apply(this, args); }, timeout);
+    };
+}
 
 async function GetArtistImageFromApple(artistId) {
     try {
@@ -147,3 +155,27 @@ function renderSelectedArtists() {
         selectedArtists.appendChild(card);
     });
 }
+
+function addArtist(artist) {
+    chosenArtists.push(artist);
+    renderSelectedArtists();
+    updateStartButton();
+}
+
+function updateStartButton() {
+    if (chosenArtists.length === 0) {
+        startButton.disabled = true;
+        startButton.className = "mt-8 w-64 rounded-full bg-white/40 text-black/60 py-3 font-bold block mx-auto cursor-not-allowed";
+    } else {
+        startButton.disabled = false;
+        startButton.className = "mt-8 w-64 rounded-full bg-white text-black py-3 font-bold block mx-auto hover:scale-105 transition-transform duration-200";
+    }
+}
+
+artistSearch.addEventListener("input", debounce((e) => {
+    searchArtistsFromAPI(e.target.value.trim());
+}, 400));
+
+// Initial Render
+renderSelectedArtists();
+updateStartButton();
