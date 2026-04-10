@@ -9,7 +9,7 @@ const chosenArtists = [];
 
 async function GetArtistImageFromApple(artistId) {
     try {
-        // just change entity=song to album
+        // just had to change entity=song to album to search for albums
         const url = `https://itunes.apple.com/lookup?id=${artistId}&entity=album&limit=1`;
         const res = await fetch(url);
         const data = await res.json();
@@ -23,7 +23,7 @@ async function GetArtistImageFromApple(artistId) {
                 return highResImage;
             }
         }
-        
+        // if none upload placeholder image, we should replace this with our own custom one
         return "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png";
     } catch (err) {
         console.error("Failed to fetch image from Apple:", err);
@@ -52,7 +52,7 @@ async function searchArtistsFromAPI(query) {
             return;
         }
 
-        // need a function here for rendering the search results
+        renderSearchResults(results);
 
     } catch (error) {
         console.error("API Error:", error);
@@ -60,3 +60,56 @@ async function searchArtistsFromAPI(query) {
     }
 }
 
+function renderSearchResults(results) {
+    // refresh results
+    searchResults.innerHTML = "";
+
+    results.forEach(artistData => {
+        // only store information that we need from the API
+        const artist = {
+            id: artistData.artistId,
+            name: artistData.artistName,
+            image: "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png" // Placeholder
+        };
+
+        // variable for artists already chosen
+        const alreadySelected = chosenArtists.some(c => c.id === artist.id);
+
+        const card = document.createElement("div");
+        // make already chosen artists appear differently in the search
+        card.className = `bg-white text-black rounded-3xl p-4 flex items-center justify-between gap-4 ${alreadySelected ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:scale-[1.01] transition-transform duration-200'}`;
+        
+        const imgId = `img-search-${artist.id}`;
+
+        card.innerHTML = `
+          <div class="flex items-center gap-4">
+            <img id="${imgId}" src="${artist.image}" alt="${artist.name}" class="w-16 h-16 rounded-2xl object-cover bg-gray-200">
+            <span class="text-3xl font-bold">${artist.name}</span>
+          </div>
+          <span class="text-sm font-semibold ${alreadySelected ? "text-neon-green" : "text-black/60"}">
+            ${alreadySelected ? "Selected" : "Add"}
+          </span>
+        `;
+
+        if (!alreadySelected) {
+            card.addEventListener("click", async () => {
+                card.querySelector("span.text-sm").textContent = "Loading...";
+                
+                const actualImage = await GetArtistImageFromApple(artist.id);
+                artist.image = actualImage;
+                
+                addArtist(artist);
+                
+                artistSearch.value = "";
+                searchResults.innerHTML = "";
+            });
+        }
+
+        searchResults.appendChild(card);
+
+        GetArtistImageFromApple(artist.id).then(imgUrl => {
+            const imgElement = document.getElementById(imgId);
+            if (imgElement) imgElement.src = imgUrl;
+        });
+    });
+}
