@@ -1,7 +1,7 @@
 const players = [
   { name: "John", points: 432532, streak: 1923, accuracy: 96, games: 184, avgHints: 1.3 },
   { name: "Nathan", points: 320000, streak: 841, accuracy: 91, games: 167, avgHints: 1.8 },
-  { name: "Mohammad", points: 280000, streak: 522, accuracy: 89, games: 152, avgHints: 2.0 },
+  { name: "Mohammad", points: 320000, streak: 841, accuracy: 91, games: 152, avgHints: 2.0 },
   { name: "Dhruv", points: 250000, streak: 411, accuracy: 85, games: 141, avgHints: 2.2 },
   { name: "Surtaj", points: 98450, streak: 48, accuracy: 79, games: 64, avgHints: 2.7 }
 ];
@@ -25,36 +25,47 @@ function formatNumber(number) {
   return number.toLocaleString();
 }
 
-function getVisiblePlayers() {
-  const searchText = searchInput.value.toLowerCase();
+function sortPlayers(playerList, sortBy) {
+  return [...playerList].sort(function (a, b) {
+    if (sortBy === "streak") {
+      return (
+        b.streak - a.streak ||
+        b.points - a.points ||
+        b.accuracy - a.accuracy ||
+        a.name.localeCompare(b.name)
+      );
+    }
 
-  let filteredPlayers = players.filter(function (player) {
+    if (sortBy === "accuracy") {
+      return (
+        b.accuracy - a.accuracy ||
+        b.points - a.points ||
+        b.streak - a.streak ||
+        a.name.localeCompare(b.name)
+      );
+    }
+
+    return (
+      b.points - a.points ||
+      b.streak - a.streak ||
+      b.accuracy - a.accuracy ||
+      a.name.localeCompare(b.name)
+    );
+  });
+}
+
+function getVisiblePlayers() {
+  const searchText = searchInput.value.trim().toLowerCase();
+
+  const filteredPlayers = players.filter(function (player) {
     return player.name.toLowerCase().includes(searchText);
   });
 
-  filteredPlayers.sort(function (a, b) {
-    if (currentSort === "streak") {
-      return b.streak - a.streak;
-    }
-
-    if (currentSort === "accuracy") {
-      return b.accuracy - a.accuracy;
-    }
-
-    return b.points - a.points;
-  });
-
-  return filteredPlayers;
+  return sortPlayers(filteredPlayers, currentSort);
 }
 
 function getGlobalTopPlayers() {
-  const globalPlayers = [...players];
-
-  globalPlayers.sort(function (a, b) {
-    return b.points - a.points;
-  });
-
-  return globalPlayers;
+  return sortPlayers(players, "points");
 }
 
 function updateStats(playerList) {
@@ -120,6 +131,17 @@ function updatePlayerDetail(playerList) {
 function updateTable(playerList) {
   tableBody.innerHTML = "";
 
+  if (playerList.length === 0) {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td colspan="7" class="rounded-2xl px-4 py-6 text-center text-white/60 bg-white/5">
+        No players found.
+      </td>
+    `;
+    tableBody.appendChild(row);
+    return;
+  }
+
   playerList.forEach(function (player, index) {
     const row = document.createElement("tr");
     row.className = "bg-white/5 hover:bg-white/10 transition";
@@ -140,6 +162,14 @@ function updateTable(playerList) {
 
 function updateCards(playerList) {
   cardsContainer.innerHTML = "";
+
+  if (playerList.length === 0) {
+    const emptyCard = document.createElement("div");
+    emptyCard.className = "rounded-2xl border border-white/10 bg-white/5 p-4 text-white/60";
+    emptyCard.textContent = "No players found.";
+    cardsContainer.appendChild(emptyCard);
+    return;
+  }
 
   playerList.forEach(function (player, index) {
     const card = document.createElement("div");
