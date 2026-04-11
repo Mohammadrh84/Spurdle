@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Artist - Spurdle</title>
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../Scripts/tailwind-config.js"></script>
+    <script src="../Scripts/select-artist.js" defer></script>
+</head>
+
+<body class="bg-background-black text-white min-h-screen">
+    <main class="max-w-5xl mx-auto px-6 py-6">
+        <header class="flex items-center justify-between py-4">
+            <h1 class="font-syne text-6xl">
+                <span class="text-white">spu</span><span class="text-neon-green">rdle</span>
+            </h1>
+
+            <nav class="flex items-center gap-8 text-white font-semibold">
+                <a href="leaderboard.html">Leaderboard</a>
+                <a href="sign-up.html">Login</a>
+                <div class="w-12 h-12 rounded-full bg-white/80"></div>
+            </nav>
+        </header>
+
+        <section class="mt-12 flex justify-center">
+            <div class="w-full max-w-xl">
+                <h2 class="text-4xl font-bold mb-6">Select your artists</h2>
+
+                <input
+                    id="artistSearch"
+                    type="text"
+                    placeholder="Search artists"
+                    class="w-full rounded-3xl bg-white/20 px-5 py-4 text-2xl text-white outline-none"
+                >
+
+                <div id="searchResults" class="mt-4 space-y-3"></div>
+
+                <h3 class="text-3xl font-bold mt-10 mb-4">Selected Artist/s:</h3>
+                <div id="selectedArtists" class="space-y-4"></div>
+
+                <button
+                    id="startButton"
+                    class="mt-8 w-64 rounded-full bg-white text-black py-3 font-bold block mx-auto"
+                >
+                    Start
+                </button>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
