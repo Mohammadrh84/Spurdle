@@ -2,6 +2,7 @@ let cacheArtistID = null;
 let cacheArtistName = null;
 const listOfArtists = ["Taylor swift", "Ed Sheeran", "Adele", "Drake", "Beyoncé", "The Weeknd", "Billie Eilish", "Bruno Mars", "Ariana Grande", "Justin Bieber"];
 let listOfSongs = [];
+let listOfSongNames = [];
 let cacheSongDeets = null;
 let lettersInSong = [];
 let lettersCorrect = [];
@@ -20,10 +21,12 @@ async function GetArtistIdName(artistName) {
 
 async function filterSongs(SongsInJSON, randomArtist) {
     for (let i = 0; i < SongsInJSON.length; i++) {
-        if (SongsInJSON[i].artistId === randomArtist) {
+        if (SongsInJSON[i].artistId === randomArtist && SongsInJSON[i].wrapperType === "track") {
             listOfSongs.push(SongsInJSON[i]);
+            listOfSongNames.push(SongsInJSON[i].trackName);
         }
     }
+    console.log(listOfSongNames);
 }
 async function GetArtistSongs(randomArtist) {
     const searchArtistsSongsUrl = `https://itunes.apple.com/lookup?id=${encodeURIComponent(randomArtist)}&entity=song&limit=200`;
@@ -230,3 +233,52 @@ async function playAgain() {
     document.getElementById('result-overlay').classList.add('hidden');
     location.reload();
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const guessInput = document.getElementById('guess-input');
+    const suggestionsList = document.getElementById('suggestions-list');
+
+    // check for input and conver to lowercase
+    guessInput.addEventListener('input', function() {
+        const query = this.value.toLowerCase().trim();
+        suggestionsList.innerHTML = ''; // Clear previous
+
+        // if there is no input do not show the dropdown
+        if (!query) {
+            suggestionsList.classList.add('hidden');
+            return;
+        }
+
+        // filter the list based on what user has typed, not case sensitive
+        const matches = listOfSongNames.filter(song => song.toLowerCase().includes(query));
+
+        // if there are any matches display them
+        if (matches.length > 0) {
+            suggestionsList.classList.remove('hidden');
+            
+            matches.forEach(match => {
+                const li = document.createElement('li');
+                li.textContent = match;
+                li.className = "px-4 py-3 text-sm text-white/80 hover:bg-neon-green/10 hover:text-neon-green cursor-pointer border-b border-white/5 last:border-0";
+                
+                // when match is clicked enter the exact text in the input box so user can press guess
+                li.addEventListener('click', function() {
+                    guessInput.value = match;
+                    suggestionsList.classList.add('hidden');
+                });
+                
+                suggestionsList.appendChild(li);
+            });
+        } else {
+            // if there are no matches, hide the list
+            suggestionsList.classList.add('hidden');
+        }
+    });
+
+    // if user clicks outside the dropdown hide it
+    document.addEventListener('click', function(event) {
+        if (!guessInput.contains(event.target) && !suggestionsList.contains(event.target)) {
+            suggestionsList.classList.add('hidden');
+        }
+    });
+});

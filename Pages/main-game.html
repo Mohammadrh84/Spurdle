@@ -33,9 +33,8 @@
         <div class="mx-auto max-w-6xl">
             <section class="mt-6 grid gap-4 md:grid-cols-2">
                 <!-- GUESSING SECTION -->
-                <div class="bg-card-black rounded-[24px] border border-white/10 bg-white/5 p-5 ">
-                    <!-- POINTS HEADER-->
-                    <section class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-6">
+                <div class="bg-card-black rounded-[24px] border border-white/10 guessing-background p-5 ">
+                    <section class="mt-1 rounded-[28px] border border-white/10 guessing-background p-6">
                         <div class="flex flex-col ">
                             <div class="w-full">
                                 <div class="flex items-center justify-between w-full">
@@ -45,7 +44,7 @@
                             </div>
                     </section>
                     <!-- ARTIST INFO -->
-                    <section class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-4">
+                    <section class="mt-1 rounded-[28px] border border-white/10 guessing-background p-4">
                         <div class="flex items-center justify-between w-full">
                             <p class="text-sm uppercase tracking-[0.35em] text-white/80">
                                 Artist:<br>
@@ -56,12 +55,17 @@
                         </div>
                     </section>
                     <!-- GUESSING -->
-                    <section class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-4">
+                    <section class="mt-1 rounded-[28px] border border-white/10 guessing-background p-4 relative">
                         <div class="flex items-center justify-between w-full">
-                            <input id="guess-input" type="text" placeholder="Guess a song name..."
-                                class="w-full mr-1 bg-input-gray text-white border border-input-border-gray py-3 px-4 rounded-[28px] placeholder:text-placeholder-gray focus:outline-none focus:ring focus:ring-neon-green focus:ring-opacity-30 focus:border-neon-green">
+                            <div class="relative w-full mr-2">
+                                <input id="guess-input" type="text" autocomplete="off" placeholder="Guess a song name..."
+                                    class="w-full bg-input-gray text-white border border-input-border-gray py-3 px-4 rounded-[28px] placeholder:text-placeholder-gray focus:outline-none focus:ring focus:ring-neon-green focus:ring-opacity-30 focus:border-neon-green">
+
+                                <ul id="suggestions-list" class="absolute z-[99] left-0 right-0 hidden max-h-48 w-full overflow-y-auto rounded-2xl border border-white/10 bg-card-black mt-5 shadow-xl shadow-black/50"></ul>
+                            </div>
+
                             <button id="guess-button"
-                                class="bg-neon-green/5 text-neon-green border border-neon-green/20 py-3 px-4 rounded-[28px] hover:shadow-[0_0_10px_#3Dff6e] transition-all duration-20">
+                                class="shrink-0 bg-neon-green/5 text-neon-green border border-neon-green/20 py-3 px-4 rounded-[28px] hover:shadow-[0_0_10px_#3Dff6e] transition-all duration-20">
                                 Guess
                             </button>
                         </div>
@@ -256,7 +260,7 @@
                         class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-6 hidden">
                         <div class="flex flex-col gap-4 ">
                             <div class="flex items-center justify-between w-full">
-                                <p class="text-xs uppercase tracking-[0.35em] text-white">Album name</p>
+                                <p class="text-xs uppercase tracking-[0.35em] text-white">song snippet</p>
                                 <div class="rounded-full border border border-neon-green/20 bg-neon-green/5 p-2">
                                     <p id="artist-name-revealed"
                                         class="text-xs uppercase tracking-[0.35em] text-neon-green  px-2">revealed</p>
