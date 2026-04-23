@@ -52,13 +52,23 @@ function filterSongName(name) {
         .replace(/\s+/g, ' ')
         .trim();
 }
-
+let currentGuess = 0;
 async function isSongCorrect(Guess) {
     const { value } = await fetch('/api/song-details?argument=trackName').then(r => r.json());
     const filteredSong = filterSongName(value).toLowerCase();
     const filteredGuess = filterSongName(Guess).toLowerCase();
+    currentGuess++;
 
-    return filteredGuess === filteredSong;
+    const params = new URLSearchParams({
+        'user-guess': filteredGuess,
+        'song-name': filteredSong,
+        'type': 0,
+        'current-hint': 0
+    });
+    
+    const { GuessStatus, CurrentPoints } = await fetch(`/api/points?${params}`).then(r => r.json());
+    document.getElementById('current-points').textContent = CurrentPoints;
+    return GuessStatus;
 }
 
 document.getElementById('guess-button').addEventListener('click', async function() {
@@ -103,7 +113,7 @@ const hintSections = [
 
 let currentHint = 0;
 
-function NextHint() {
+async function NextHint() {
     if (currentHint >= 5) return;
     hintSections[currentHint].hidden.classList.add('hidden');
     hintSections[currentHint].hint.classList.remove('hidden');
@@ -112,6 +122,16 @@ function NextHint() {
     if (currentHint === 3) {
         UpdateLettersHint();
     }
+
+    const params = new URLSearchParams({
+        'user-guess': "",
+        'song-name': "",
+        'type': 1,
+        'current-hint': currentHint
+    });
+
+    const { GuessStatus, CurrentPoints } = await fetch(`/api/points?${params}`).then(r => r.json());
+    document.getElementById('current-points').textContent = CurrentPoints;
 }
 
 async function checkLetters() {

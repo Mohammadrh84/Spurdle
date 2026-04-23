@@ -4,6 +4,7 @@ import random
 
 letters_correct = set()
 letters_wrong = set()
+random_song_details = {}
 app = Flask(__name__)
 
 @app.route('/')
@@ -108,6 +109,49 @@ def Send_current_letters():
         "correct": list(letters_correct),
         "wrong": list(letters_wrong)
     })
+
+current_points = 100
+num_guesses = 0
+@app.route('/api/points')
+def calculate_points():
+    global current_points
+    user_guess = request.args.get('user-guess')
+    song_name = request.args.get('song-name')
+    type_of_points = int(request.args.get('type'))
+    current_hint = int(request.args.get('current-hint'))
+    print(f"{user_guess} {song_name}")
+    if (type_of_points == 0): #0 is Guess
+        current_points -= 3
+    elif (type_of_points == 1): #1 is Hint
+        if current_hint == 1:
+            current_points -= 5
+        elif current_hint == 2:
+            current_points -= 10
+        elif current_hint == 3:
+            current_points -= 15
+        elif current_hint == 4:
+            current_points -= 10
+        elif current_hint == 5:
+            current_points -= 15
+    num_guesses += 1
+    if num_guesses <= 15 and user_guess == song_name and user_guess != "" and song_name != "":
+        final_points = current_points
+        reset_game()
+        return jsonify({"CurrentPoints": final_points, "GuessResult": True})
+
+    if current_points <= 0:
+        reset_game()
+        return jsonify({"CurrentPoints": current_points, "GuessResult": False})
+
+
+def reset_game():
+    global current_points
+    current_points = 100
+    letters_correct.clear()
+    letters_wrong.clear()
+    print("Game reset successfully")
+    return jsonify({"message": "Game reset successfully"})
+
 
 if __name__ == '__main__':
     app.run(debug=True)
