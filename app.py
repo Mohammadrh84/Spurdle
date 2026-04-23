@@ -120,6 +120,7 @@ def calculate_points():
     song_name = request.args.get('song-name')
     type_of_points = int(request.args.get('type'))
     current_hint = int(request.args.get('current-hint'))
+    print(f"{user_guess} {song_name}")
     if (type_of_points == 0): #0 is Guess
         current_points -= 3
     elif (type_of_points == 1): #1 is Hint
@@ -135,12 +136,10 @@ def calculate_points():
             current_points -= 15
     num_guesses += 1
     if num_guesses <= 15 and user_guess == song_name and user_guess != "" and song_name != "":
-        reset_game()
-        return jsonify({"GameStatus": True, "GuessStatus": True})
+        return jsonify({"CurrentPoints": current_points, "GameStatus": True, "GuessStatus": True})
 
     if current_points <= 0:
-        reset_game()
-        return jsonify({"GameStatus": True, "GuessStatus": False}) #end game
+        return jsonify({"CurrentPoints": current_points, "GameStatus": True, "GuessStatus": False}) #end game
 
     return jsonify({"CurrentPoints": current_points, "GuessStatus": False})
 

@@ -70,7 +70,10 @@ async function isSongCorrect(Guess) {
     const { GuessStatus, CurrentPoints, GameStatus } = await fetch(`/api/points?${params}`).then(r => r.json());
     document.getElementById('current-points').textContent = CurrentPoints;
     if (GameStatus) {
+        document.getElementById('your-score').textContent = CurrentPoints;
+        document.getElementById('total-points').textContent = "test";
         showResultsOverlay();
+        await fetch('/api/reset');
         return GuessStatus;
     } 
     return GuessStatus;
