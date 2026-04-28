@@ -5,7 +5,7 @@ import random
 letters_correct = set()
 letters_wrong = set()
 random_song_details = {}
-app = Flask(__name__)
+from app import app
 
 @app.route('/')
 def home():
