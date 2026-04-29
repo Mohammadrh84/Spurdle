@@ -8,6 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="{{ url_for('static', filename='tailwind-config.js') }}"></script>
     <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='select-artists.js') }}" defer></script>
 </head>
 
 <body class="bg-background-black text-white min-h-screen">
@@ -42,7 +43,13 @@
         </header>
 
         <section class="mt-6 rounded-[28px] border border-white/10 bg-[#131318] p-4 md:p-6">
-            <form method="POST" action="{{ url_for('select_artists') }}" class="mx-auto max-w-5xl">
+            <form
+                id="selectArtistsForm"
+                method="POST"
+                action="{{ url_for('select_artists') }}"
+                class="mx-auto max-w-5xl"
+                data-max-artists="10"
+            >
                 <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                     <div>
                         <h3 class="text-2xl font-bold md:text-3xl">Available Artists</h3>
@@ -51,10 +58,20 @@
                         </p>
                     </div>
 
-                    <p class="text-sm text-white/60">
-                        {{ selected_artist_ids|length }} selected
+                    <p
+                        id="selectedArtistsCount"
+                        class="text-sm text-white/60"
+                    >
+                        {{ selected_artist_ids|length }} / 10 selected
                     </p>
                 </div>
+
+                <p
+                    id="artistLimitMessage"
+                    class="mt-4 hidden rounded-2xl border border-[#ff4a6e]/50 bg-[#ff4a6e1f] p-3 text-sm text-[#ff4a6e]"
+                >
+                    You can only select up to 10 artists.
+                </p>
 
                 {% if saved %}
                     <div class="mt-5 rounded-2xl border border-neon-green/20 bg-neon-green/5 p-4 text-sm text-neon-green">
@@ -64,13 +81,13 @@
 
                 <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {% for artist in artists %}
-                        <label class="cursor-pointer rounded-[24px] border border-white/10 bg-white/5 p-4 transition hover:border-neon-green hover:bg-neon-green/5">
+                        <label class="artist-card cursor-pointer rounded-[24px] border border-white/10 bg-white/5 p-4 transition hover:border-neon-green hover:bg-neon-green/5">
                             <div class="flex items-center gap-4">
                                 <input
                                     type="checkbox"
                                     name="artists"
                                     value="{{ artist.id }}"
-                                    class="h-5 w-5 accent-neon-green"
+                                    class="artist-checkbox h-5 w-5 accent-neon-green"
                                     {% if artist.id in selected_artist_ids %}checked{% endif %}
                                 >
 
@@ -103,7 +120,7 @@
                     </button>
 
                     <p class="text-center text-sm text-white/50">
-                        Selected artists are now stored in the Flask session.
+                        Selected artists are stored in the Flask session.
                     </p>
                 </div>
             </form>
