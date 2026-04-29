@@ -5,6 +5,7 @@ const artistSearch = document.getElementById("artistSearch");
 const startButton = document.getElementById("startButton");
 const selectedArtistsSummary = document.getElementById("selectedArtistsSummary");
 const clearArtistsButton = document.getElementById("clearArtistsButton");
+const startButtonMessage = document.getElementById("startButtonMessage");
 
 const MAX_SELECTED_ARTISTS = 10;
 const SELECTED_ARTISTS_STORAGE_KEY = "selectedArtists";
@@ -111,6 +112,8 @@ function updateStartButton() {
       "mt-8 w-full rounded-full bg-white/10 px-4 py-3 font-bold text-white/40 cursor-not-allowed transition md:mx-auto md:block md:w-64";
 
     clearArtistsButton.classList.add("hidden");
+    startButtonMessage.textContent = "Select at least one artist to start.";
+    startButtonMessage.className = "mt-3 text-center text-sm text-white/50";
     return;
   }
 
@@ -119,6 +122,8 @@ function updateStartButton() {
     "mt-8 w-full rounded-full bg-neon-green px-4 py-3 font-bold text-black transition hover:scale-105 md:mx-auto md:block md:w-64";
 
   clearArtistsButton.classList.remove("hidden");
+  startButtonMessage.textContent = "Ready to start!";
+  startButtonMessage.className = "mt-3 text-center text-sm text-neon-green/80";
 }
 
 function renderSelectedArtists() {
