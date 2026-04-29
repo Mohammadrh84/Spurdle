@@ -54,7 +54,7 @@
                     <div>
                         <h3 class="text-2xl font-bold md:text-3xl">Available Artists</h3>
                         <p class="mt-1 text-sm text-white/55">
-                            Select up to 10 artists before starting the game.
+                            Select 1 to 10 artists before starting the game.
                         </p>
                     </div>
 
@@ -72,6 +72,19 @@
                 >
                     You can only select up to 10 artists.
                 </p>
+
+                <p
+                    id="artistRequiredMessage"
+                    class="mt-4 hidden rounded-2xl border border-[#ff4a6e]/50 bg-[#ff4a6e1f] p-3 text-sm text-[#ff4a6e]"
+                >
+                    Please select at least one artist before saving.
+                </p>
+
+                {% if error_message %}
+                    <div class="mt-5 rounded-2xl border border-[#ff4a6e]/50 bg-[#ff4a6e1f] p-4 text-sm text-[#ff4a6e]">
+                        {{ error_message }}
+                    </div>
+                {% endif %}
 
                 {% if saved %}
                     <div class="mt-5 rounded-2xl border border-neon-green/20 bg-neon-green/5 p-4 text-sm text-neon-green">
@@ -113,14 +126,27 @@
 
                 <div class="mt-8 flex flex-col items-center gap-3">
                     <button
+                        id="saveArtistsButton"
                         type="submit"
-                        class="w-full rounded-full bg-neon-green px-4 py-3 font-bold text-black transition hover:scale-105 md:w-64"
+                        class="w-full rounded-full bg-white/10 px-4 py-3 font-bold text-white/40 cursor-not-allowed transition md:w-64"
+                        disabled
                     >
                         Save selected artists
                     </button>
 
-                    <p class="text-center text-sm text-white/50">
-                        Selected artists are stored in the Flask session.
+                    <button
+                        id="clearArtistsButton"
+                        type="button"
+                        class="hidden rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white/70 transition hover:border-neon-green hover:text-neon-green"
+                    >
+                        Clear selection
+                    </button>
+
+                    <p
+                        id="saveArtistsMessage"
+                        class="text-center text-sm text-white/50"
+                    >
+                        Select at least one artist to continue.
                     </p>
                 </div>
             </form>
