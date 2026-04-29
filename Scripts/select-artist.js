@@ -7,12 +7,16 @@ const selectedArtistsSummary = document.getElementById("selectedArtistsSummary")
 const clearArtistsButton = document.getElementById("clearArtistsButton");
 
 const MAX_SELECTED_ARTISTS = 10;
+const SELECTED_ARTISTS_STORAGE_KEY = "selectedArtists";
+
 const chosenArtists = [];
 
 function debounce(func, timeout = 400) {
   let timer;
+
   return (...args) => {
     clearTimeout(timer);
+
     timer = setTimeout(() => {
       func.apply(null, args);
     }, timeout);
@@ -21,6 +25,43 @@ function debounce(func, timeout = 400) {
 
 function getFallbackImage() {
   return "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png";
+}
+
+function saveSelectedArtists() {
+  localStorage.setItem(SELECTED_ARTISTS_STORAGE_KEY, JSON.stringify(chosenArtists));
+}
+
+function loadSavedArtists() {
+  try {
+    const savedArtists = JSON.parse(localStorage.getItem(SELECTED_ARTISTS_STORAGE_KEY) || "[]");
+
+    if (!Array.isArray(savedArtists)) {
+      return;
+    }
+
+    savedArtists.forEach((artist) => {
+      if (!artist || !artist.id || !artist.name) {
+        return;
+      }
+
+      if (chosenArtists.length >= MAX_SELECTED_ARTISTS) {
+        return;
+      }
+
+      if (isAlreadySelected(artist.id)) {
+        return;
+      }
+
+      chosenArtists.push({
+        id: artist.id,
+        name: artist.name,
+        image: artist.image || getFallbackImage(),
+      });
+    });
+  } catch (error) {
+    console.error("Could not load saved artists:", error);
+    localStorage.removeItem(SELECTED_ARTISTS_STORAGE_KEY);
+  }
 }
 
 function showSearchResults() {
@@ -122,6 +163,7 @@ function renderSelectedArtists() {
 
     removeButton.addEventListener("click", function () {
       chosenArtists.splice(index, 1);
+      saveSelectedArtists();
       renderSelectedArtists();
 
       const currentQuery = artistSearch.value.trim();
@@ -149,6 +191,7 @@ function addArtist(artist) {
   }
 
   chosenArtists.push(artist);
+  saveSelectedArtists();
   renderSelectedArtists();
 }
 
@@ -283,6 +326,7 @@ document.addEventListener("click", function (event) {
 
 clearArtistsButton.addEventListener("click", function () {
   chosenArtists.length = 0;
+  saveSelectedArtists();
   renderSelectedArtists();
 
   const currentQuery = artistSearch.value.trim();
@@ -297,9 +341,10 @@ startButton.addEventListener("click", function () {
     return;
   }
 
-  localStorage.setItem("selectedArtists", JSON.stringify(chosenArtists));
+  saveSelectedArtists();
   window.location.href = "main-game.html";
 });
 
+loadSavedArtists();
 renderSelectedArtists();
 updateStartButton();
