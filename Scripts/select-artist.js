@@ -5,6 +5,7 @@ const artistSearch = document.getElementById("artistSearch");
 const startButton = document.getElementById("startButton");
 const selectedArtistsSummary = document.getElementById("selectedArtistsSummary");
 
+const MAX_SELECTED_ARTISTS = 10;
 const chosenArtists = [];
 
 function debounce(func, timeout = 400) {
@@ -42,6 +43,7 @@ async function getArtistImageFromApple(artistId) {
 
     if (data.results && data.results.length > 1) {
       const albumData = data.results[1];
+
       if (albumData.artworkUrl100) {
         return albumData.artworkUrl100.replace("100x100bb", "600x600bb");
       }
@@ -55,18 +57,18 @@ async function getArtistImageFromApple(artistId) {
 }
 
 function updateStartButton() {
+  selectedArtistsSummary.textContent = `${chosenArtists.length} / ${MAX_SELECTED_ARTISTS} selected`;
+
   if (chosenArtists.length === 0) {
     startButton.disabled = true;
     startButton.className =
       "mt-8 w-full rounded-full bg-white/10 px-4 py-3 font-bold text-white/40 cursor-not-allowed transition md:mx-auto md:block md:w-64";
-    selectedArtistsSummary.textContent = "0 selected";
     return;
   }
 
   startButton.disabled = false;
   startButton.className =
     "mt-8 w-full rounded-full bg-neon-green px-4 py-3 font-bold text-black transition hover:scale-105 md:mx-auto md:block md:w-64";
-  selectedArtistsSummary.textContent = `${chosenArtists.length} selected`;
 }
 
 function renderSelectedArtists() {
@@ -78,6 +80,7 @@ function renderSelectedArtists() {
         No artists selected yet.
       </div>
     `;
+
     updateStartButton();
     return;
   }
@@ -87,6 +90,7 @@ function renderSelectedArtists() {
 
   chosenArtists.forEach((artist, index) => {
     const chip = document.createElement("div");
+
     chip.className =
       "flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-2 py-2 pr-3";
 
@@ -96,7 +100,11 @@ function renderSelectedArtists() {
         alt="${artist.name}"
         class="w-10 h-10 rounded-full object-cover shrink-0 bg-black/20"
       >
-      <span class="max-w-[170px] truncate text-sm font-semibold text-white">${artist.name}</span>
+
+      <span class="max-w-[170px] truncate text-sm font-semibold text-white">
+        ${artist.name}
+      </span>
+
       <button
         class="flex h-8 w-8 items-center justify-center rounded-full bg-black/30 text-sm font-bold text-white transition hover:text-neon-green"
         aria-label="Remove ${artist.name}"
@@ -106,11 +114,13 @@ function renderSelectedArtists() {
     `;
 
     const removeButton = chip.querySelector("button");
+
     removeButton.addEventListener("click", function () {
       chosenArtists.splice(index, 1);
       renderSelectedArtists();
 
       const currentQuery = artistSearch.value.trim();
+
       if (currentQuery) {
         searchArtistsFromAPI(currentQuery);
       }
@@ -128,12 +138,18 @@ function addArtist(artist) {
     return;
   }
 
+  if (chosenArtists.length >= MAX_SELECTED_ARTISTS) {
+    renderSearchMessage(`You can only select up to ${MAX_SELECTED_ARTISTS} artists.`, true);
+    return;
+  }
+
   chosenArtists.push(artist);
   renderSelectedArtists();
 }
 
 function renderSearchMessage(message, isError = false) {
   showSearchResults();
+
   searchResults.innerHTML = `
     <li class="px-4 py-3 text-sm ${isError ? "text-red-400" : "text-white/60"} border-b border-white/5 last:border-0">
       ${message}
@@ -153,8 +169,8 @@ function renderSearchResults(results) {
 
     const alreadySelected = isAlreadySelected(artist.id);
     const item = document.createElement("li");
-    item.className =
-      "px-4 py-3 border-b border-white/5 last:border-0";
+
+    item.className = "px-4 py-3 border-b border-white/5 last:border-0";
 
     const imageId = `artist-image-${artist.id}-${index}`;
 
@@ -191,12 +207,15 @@ function renderSearchResults(results) {
     if (!alreadySelected) {
       button.addEventListener("click", async function () {
         const status = button.querySelector("span:last-child");
+
         if (status) {
           status.textContent = "Loading...";
         }
 
         artist.image = await getArtistImageFromApple(artist.id);
+
         addArtist(artist);
+
         artistSearch.value = "";
         hideSearchResults();
       });
@@ -206,6 +225,7 @@ function renderSearchResults(results) {
 
     getArtistImageFromApple(artist.id).then((imageUrl) => {
       const imageElement = document.getElementById(imageId);
+
       if (imageElement) {
         imageElement.src = imageUrl;
       }
@@ -227,6 +247,7 @@ async function searchArtistsFromAPI(query) {
     const response = await fetch(
       `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=musicArtist&limit=6`
     );
+
     const data = await response.json();
     const results = data.results || [];
 
