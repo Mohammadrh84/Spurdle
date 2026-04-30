@@ -20,9 +20,11 @@
 
             <!--Buttons, should redirect to either signup / login if user isnt logged in-->
             <div class="flex flex-row gap-5 mt-8">
-                    <button class="font-montserrat font-semibold bg-neon-green text-black px-6 py-3 rounded-lg hover:scale-105 hover:shadow-[0_0_10px_#3Dff6e] transition-all duration-200" onclick="goToSignIn()">
-                        Start playing
-                    </button>
+                    <a href="{{ url_for('select_artists') }}">
+                        <button class="font-montserrat font-semibold bg-neon-green text-black px-6 py-3 rounded-lg hover:scale-105 hover:shadow-[0_0_10px_#3Dff6e] transition-all duration-200">
+                            Start Game
+                        </button>
+                    </a>
                     <button class="font-montserrat font-semibold bg-white text-background-black px-6 py-3 rounded-lg hover:scale-105 transition-transform duration-200" onclick="goToLeaderboard()">
                         Leaderboard
                     </button>

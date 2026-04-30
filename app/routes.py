@@ -14,24 +14,24 @@ MAX_SELECTED_ARTISTS = 10
 
 
 @app.route('/')
-def home():
-    return render_template('main-game.html')
-
-@app.route('/welcome')
 def welcome():
     return render_template('welcome.html')
+
+@app.route('/main_game')
+def main_game():
+    return render_template('main-game.html')
 
 @app.route('/leaderboard')
 def leaderboard():
     return render_template('leaderboard.html')
 
 
-@app.route('/sign-in')
+@app.route('/sign_in')
 def sign_in():
     return render_template('sign-in.html')
 
 
-@app.route('/sign-up')
+@app.route('/sign_up')
 def sign_up():
     return render_template('sign-up.html')
 
@@ -201,7 +201,7 @@ def artist_image_by_id():
     })
 
 
-@app.route('/select-artists', methods=['GET', 'POST'])
+@app.route('/select_artists', methods=['GET', 'POST'])
 def select_artists():
     selected_artists = session.get('selected_artists', [])
     error_message = None
