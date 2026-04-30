@@ -123,9 +123,9 @@ artistFilterInput.addEventListener("input", function () {
 
 selectArtistsForm.addEventListener("submit", function (event) {
   const selectedCount = getSelectedArtistCount();
-  const clickedButton = document.activeElement;
+  const clickedButton = event.submitter || document.activeElement;
 
-  if (clickedButton && clickedButton.value === "clear") {
+  if (clickedButton && clickedButton.dataset.skipValidation === "true") {
     return;
   }
 
