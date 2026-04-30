@@ -17,6 +17,9 @@ MAX_SELECTED_ARTISTS = 10
 def home():
     return render_template('main-game.html')
 
+@app.route('/welcome')
+def welcome():
+    return render_template('welcome.html')
 
 @app.route('/leaderboard')
 def leaderboard():

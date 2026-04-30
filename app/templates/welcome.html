@@ -3,12 +3,11 @@
     <head>
         <title>Spurdle</title>
 
-        <link rel="stylesheet" href="style.css">
-
         <script src="https://cdn.tailwindcss.com"></script>
-        <!-- Import custom configuration (fonts and colours)-->
-        <script src="../Scripts/tailwind-config.js"></script>
-        <script src="../Scripts/script.js"></script>
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <script src="{{ url_for('static', filename='leaderboard.js') }}"></script>
+        <script src="{{ url_for('static', filename='tailwind-config.js') }}"></script>
     </head>
 
     <body class="bg-[url('https://static.vecteezy.com/system/resources/previews/020/948/545/non_2x/green-and-black-wave-abstract-background-suitable-for-landing-page-and-computer-desktop-background-3d-vector.jpg')] backdrop-blur-[100px] bg-cover bg-center bg-no-repeat">
