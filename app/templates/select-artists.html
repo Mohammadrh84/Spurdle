@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Artists - Spurdle</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{{ url_for('static', filename='tailwind-config.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='select-artists.js') }}" defer></script>
+</head>
+
+<body class="bg-background-black text-white min-h-screen">
+    <main class="max-w-6xl mx-auto px-4 py-6 md:px-8 lg:px-12">
+        <header class="rounded-[28px] border border-white/10 bg-black/40 p-4 shadow-[0_0_30px_rgba(0,0,0,0.25)] md:p-6">
+            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <a href="{{ url_for('home') }}" class="inline-block">
+                    <h1 class="font-syne text-5xl leading-none md:text-6xl">
+                        <span class="text-white">spu</span><span class="text-neon-green">rdle</span>
+                    </h1>
+                </a>
+
+                <nav class="flex flex-wrap items-center gap-3 text-sm font-semibold md:gap-6">
+                    <a href="{{ url_for('leaderboard') }}" class="transition hover:text-neon-green">Leaderboard</a>
+                    <a href="{{ url_for('sign_in') }}" class="transition hover:text-neon-green">Login</a>
+                    <a
+                        href="{{ url_for('home') }}"
+                        class="rounded-xl bg-neon-green px-4 py-2 text-black transition hover:scale-105"
+                    >
+                        Game
+                    </a>
+                </nav>
+            </div>
+
+            <div class="mt-8">
+                <p class="text-sm uppercase tracking-[0.35em] text-neon-green/80">artist setup</p>
+                <h2 class="mt-3 text-4xl font-bold md:text-5xl">Select your artists</h2>
+                <p class="mt-4 max-w-2xl text-sm leading-6 text-white/70 md:text-base">
+                    Search for artists you want in your game and add them to your selected list.
+                </p>
+            </div>
+        </header>
+
+        <section class="mt-6 rounded-[28px] border border-white/10 bg-[#131318] p-4 md:p-6">
+            <form
+                id="selectArtistsForm"
+                method="POST"
+                action="{{ url_for('select_artists') }}"
+                class="mx-auto max-w-3xl"
+                data-max-artists="{{ max_selected_artists }}"
+            >
+                <input
+                    id="selectedArtistsJson"
+                    type="hidden"
+                    name="selected_artists_json"
+                    value="[]"
+                >
+
+                <script id="initialSelectedArtists" type="application/json">
+                    {{ selected_artists | tojson }}
+                </script>
+
+                <div class="relative">
+                    <label
+                        for="artistSearch"
+                        class="mb-2 block text-sm font-semibold text-white/70"
+                    >
+                        Search for an artist
+                    </label>
+
+                    <input
+                        id="artistSearch"
+                        type="text"
+                        autocomplete="off"
+                        placeholder="Search artists"
+                        class="w-full rounded-[28px] border border-white/10 bg-black/30 px-4 py-3 text-base text-white outline-none placeholder:text-white/35 focus:border-neon-green"
+                    >
+
+                    <div
+                        id="searchResultsWrap"
+                        class="absolute left-0 right-0 z-[99] mt-3 hidden overflow-hidden rounded-2xl border border-white/10 bg-card-black shadow-xl shadow-black/50"
+                    >
+                        <ul
+                            id="searchResults"
+                            class="max-h-72 overflow-y-auto"
+                        ></ul>
+                    </div>
+                </div>
+
+                {% if error_message %}
+                    <div class="mt-5 rounded-2xl border border-[#ff4a6e]/50 bg-[#ff4a6e1f] p-4 text-sm text-[#ff4a6e]">
+                        {{ error_message }}
+                    </div>
+                {% endif %}
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div
+                                class="status-message mt-5 rounded-2xl border p-4 text-sm
+                                {% if category == 'success' %}
+                                    border-neon-green/20 bg-neon-green/5 text-neon-green
+                                {% else %}
+                                    border-white/10 bg-white/5 text-white/70
+                                {% endif %}"
+                            >
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <p id="artistLimitMessage" class="mt-5 hidden rounded-2xl border border-[#ff4a6e]/50 bg-[#ff4a6e1f] p-3 text-sm text-[#ff4a6e]">
+                    You can only select up to {{ max_selected_artists }} artists.
+                </p>
+
+                <p id="artistRequiredMessage" class="mt-5 hidden rounded-2xl border border-[#ff4a6e]/50 bg-[#ff4a6e1f] p-3 text-sm text-[#ff4a6e]">
+                    Please select at least one artist before saving.
+                </p>
+
+                <div class="mt-10">
+                    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                            <h3 class="text-2xl font-bold md:text-3xl">Selected Artist/s:</h3>
+                            <p class="mt-1 text-sm text-white/55">
+                                Choose 1 to {{ max_selected_artists }} artists before starting the game.
+                            </p>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <p id="selectedArtistsSummary" class="text-sm text-white/60">
+                                0 / {{ max_selected_artists }} selected
+                            </p>
+
+                            <button
+                                id="clearArtistsButton"
+                                type="submit"
+                                name="form_action"
+                                value="clear"
+                                data-skip-validation="true"
+                                formnovalidate
+                                class="hidden rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white/70 transition hover:border-[#ff4a6e] hover:text-[#ff4a6e]"
+                            >
+                                Clear selected artists
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="selectedArtists" class="mt-5"></div>
+                </div>
+
+                <div class="mt-8 flex flex-col items-center gap-3">
+                    <button
+                        id="saveArtistsButton"
+                        type="submit"
+                        name="form_action"
+                        value="save"
+                        class="w-full rounded-full bg-white/10 px-4 py-3 font-bold text-white/40 cursor-not-allowed transition md:w-64"
+                        disabled
+                    >
+                        Save selected artists
+                    </button>
+
+                    {% if selected_artists|length > 0 %}
+                        <a
+                            id="startGameLink"
+                            href="{{ url_for('home') }}"
+                            class="inline-flex justify-center rounded-full bg-neon-green px-5 py-2 text-sm font-bold text-black transition hover:scale-105"
+                        >
+                            Start game
+                        </a>
+                    {% endif %}
+
+                    <p id="saveArtistsMessage" class="text-center text-sm text-white/50">
+                        Select at least one artist to continue.
+                    </p>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

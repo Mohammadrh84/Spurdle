@@ -12,36 +12,37 @@
     <script defer src="{{ url_for('static', filename='itunesAPIconfig.js') }}"></script>
 </head>
 
-<!-- Main game -->
-
 <body class="bg-background-black bg-cover bg-center bg-no-repeat">
     <nav class="flex items-center justify-between px-8 border-b border-white/10">
-        <h1 class="font-syne text-[35px] text-white cursor-pointer">
-            <span onclick="goToWelcome()" class="text-white">spu</span><span onclick="goToWelcome()"
-                class="text-neon-green">rdle</span>
-        </h1>
+        <a href="{{ url_for('home') }}" class="font-syne text-[35px] text-white cursor-pointer">
+            <span class="text-white">spu</span><span class="text-neon-green">rdle</span>
+        </a>
+
         <div class="flex items-center gap-6 font-semibold text-sm">
-            <a href="leaderboard.html" class="text-white transition hover:text-neon-green">Leaderboard</a>
+            <a href="{{ url_for('leaderboard') }}" class="text-white transition hover:text-neon-green">Leaderboard</a>
             <a href="#" class="text-white transition hover:text-neon-green">My Account</a>
-            <a href="#" class="rounded-full bg-neon-green px-4 py-2 text-black transition hover:scale-105">
+            <a href="{{ url_for('select_artists') }}" class="rounded-full bg-neon-green px-4 py-2 text-black transition hover:scale-105">
                 Artist Select
             </a>
         </div>
     </nav>
+
     <main class="min-h-screen p-4">
         <div class="mx-auto max-w-6xl">
             <section class="mt-6 grid gap-4 md:grid-cols-2">
                 <!-- GUESSING SECTION -->
-                <div class="bg-card-black rounded-[24px] border border-white/10 guessing-background p-5 ">
+                <div class="bg-card-black rounded-[24px] border border-white/10 guessing-background p-5">
                     <section class="mt-1 rounded-[28px] border border-white/10 guessing-background p-6">
-                        <div class="flex flex-col ">
+                        <div class="flex flex-col">
                             <div class="w-full">
                                 <div class="flex items-center justify-between w-full">
                                     <p class="text-sm uppercase tracking-[0.35em] text-white/80">points remaining</p>
                                     <span id="current-points" class="text-sm font-bold uppercase tracking-[0.35em] text-neon-green/80">100</span>
                                 </div>
                             </div>
+                        </div>
                     </section>
+
                     <!-- ARTIST INFO -->
                     <section class="mt-1 rounded-[28px] border border-white/10 guessing-background p-4">
                         <div class="flex items-center justify-between w-full">
@@ -53,6 +54,7 @@
                                 class="w-2/5 h-2/5 rounded-xl object-cover shrink-0">
                         </div>
                     </section>
+
                     <!-- GUESSING -->
                     <section class="mt-1 rounded-[28px] border border-white/10 guessing-background p-4 relative">
                         <div class="flex items-center justify-between w-full">
@@ -69,14 +71,16 @@
                             </button>
                         </div>
                     </section>
+
                     <!-- GUESS CHECK -->
                     <div id="guess-feedback-container"></div>
                 </div>
+
                 <!-- HINT SECTION -->
-                <div class="bg-card-black rounded-[24px] border border-white/10 bg-white/5 p-5 ">
+                <div class="bg-card-black rounded-[24px] border border-white/10 bg-white/5 p-5">
                     <!-- HINT HEADER -->
                     <section class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-4 md:p-6">
-                        <div class="flex flex-col gap-4 ">
+                        <div class="flex flex-col gap-4">
                             <div>
                                 <div class="flex items-center justify-between w-full">
                                     <p class="text-sm uppercase tracking-[0.35em] text-neon-green/80">Hint</p>
@@ -90,10 +94,12 @@
                                     will reduce your points!
                                 </p>
                             </div>
+                        </div>
                     </section>
+
                     <!-- HINT 1-->
                     <section id="section-1-hidden" class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-6">
-                        <div class="flex flex-col gap-4 ">
+                        <div class="flex flex-col gap-4">
                             <div class="flex items-center justify-between w-full">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white">Release date</p>
                                 <div class="rounded-full border border-[#ff4a6e]/50 bg-[#ff4a6e1f] p-2">
@@ -101,81 +107,78 @@
                                         class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] px-2">Not revealed</p>
                                 </div>
                             </div>
-
                         </div>
                     </section>
+
                     <!-- HINT 1 Revealed-->
                     <section id="section-1-hint"
                         class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-6 hidden">
-                        <div class="flex flex-col gap-4 ">
+                        <div class="flex flex-col gap-4">
                             <div class="flex items-center justify-between w-full">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white">Release date</p>
-                                <div class="rounded-full border border border-neon-green/20 bg-neon-green/5 p-2">
+                                <div class="rounded-full border border-neon-green/20 bg-neon-green/5 p-2">
                                     <p id="artist-name-revealed"
-                                        class="text-xs uppercase tracking-[0.35em] text-neon-green  px-2">revealed</p>
+                                        class="text-xs uppercase tracking-[0.35em] text-neon-green px-2">revealed</p>
                                 </div>
                             </div>
                             <span class="text-xs uppercase tracking-[0.35em] text-neon-green" id="release-date"></span>
-
                         </div>
                     </section>
+
                     <!-- HINT 2-->
                     <section id="section-2-hidden" class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-6">
-                        <div class="flex flex-col gap-4 ">
-
+                        <div class="flex flex-col gap-4">
                             <div class="flex items-center justify-between w-full">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white">Album cover</p>
                                 <div class="rounded-full border border-[#ff4a6e]/50 bg-[#ff4a6e1f] p-2">
                                     <p id="album-cover-revealed"
                                         class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] px-2">Not revealed</p>
                                 </div>
-
                             </div>
-
                         </div>
                     </section>
+
                     <!-- HINT 2 Revealed-->
                     <section id="section-2-hint"
                         class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-6 hidden">
                         <div class="flex flex-col gap-4">
                             <div class="flex items-center justify-between w-full">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white">Album cover</p>
-                                <div class="rounded-full border border border-neon-green/20 bg-neon-green/5 p-2">
+                                <div class="rounded-full border border-neon-green/20 bg-neon-green/5 p-2">
                                     <p id="artist-name-revealed"
-                                        class="text-xs uppercase tracking-[0.35em] text-neon-green  px-2">revealed</p>
+                                        class="text-xs uppercase tracking-[0.35em] text-neon-green px-2">revealed</p>
                                 </div>
                             </div>
                             <span class="text-xs uppercase tracking-[0.35em] text-neon-green" id="release-date"></span>
                             <div class="flex items-center justify-center w-full">
                                 <img id="album-cover" src="" alt="Album Cover"
-                                    class=" w-2/5 h-2/5 rounded-xl object-cover shrink-0">
+                                    class="w-2/5 h-2/5 rounded-xl object-cover shrink-0">
                             </div>
                         </div>
                     </section>
+
                     <!-- HINT 3-->
                     <section id="section-3-hidden" class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-6">
-                        <div class="flex flex-col gap-4 ">
-
+                        <div class="flex flex-col gap-4">
                             <div class="flex items-center justify-between w-full">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white">Letter reveal</p>
                                 <div class="rounded-full border border-[#ff4a6e]/50 bg-[#ff4a6e1f] p-2">
                                     <p id="album-cover-revealed"
                                         class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] px-2">Not revealed</p>
                                 </div>
-
                             </div>
-
                         </div>
                     </section>
+
                     <!-- HINT 3 Revealed-->
                     <section id="section-3-hint"
                         class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-6 hidden">
-                        <div class="flex flex-col gap-4 ">
+                        <div class="flex flex-col gap-4">
                             <div class="flex items-center justify-between w-full">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white">letter reveal</p>
-                                <div class="rounded-full border border border-neon-green/20 bg-neon-green/5 p-2">
+                                <div class="rounded-full border border-neon-green/20 bg-neon-green/5 p-2">
                                     <p id="artist-name-revealed"
-                                        class="text-xs uppercase tracking-[0.35em] text-neon-green  px-2">revealed</p>
+                                        class="text-xs uppercase tracking-[0.35em] text-neon-green px-2">revealed</p>
                                 </div>
                             </div>
                             <div class="grid grid-cols-6 place-items-center justify-center w-full">
@@ -205,93 +208,89 @@
                                 <p id="letter-X" class="text-2xl font-bold text-white/80">X</p>
                                 <p id="letter-Y" class="text-2xl font-bold text-white/80">Y</p>
                                 <p id="letter-Z" class="text-2xl font-bold text-white/80">Z</p>
-
                             </div>
                         </div>
                     </section>
+
                     <!-- HINT 4-->
                     <section id="section-4-hidden" class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-6">
-                        <div class="flex flex-col gap-4 ">
-
-                            <div class="flex items-center justify-between  w-full">
+                        <div class="flex flex-col gap-4">
+                            <div class="flex items-center justify-between w-full">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white">Album name</p>
                                 <div class="rounded-full border border-[#ff4a6e]/50 bg-[#ff4a6e1f] p-2">
                                     <p id="album-cover-revealed"
                                         class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] px-2">Not revealed</p>
                                 </div>
-
                             </div>
-
                         </div>
                     </section>
+
                     <!-- HINT 4 Revealed-->
                     <section id="section-4-hint"
                         class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-6 hidden">
-                        <div class="flex flex-col gap-4 ">
+                        <div class="flex flex-col gap-4">
                             <div class="flex items-center justify-between w-full">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white">Album name</p>
-                                <div class="rounded-full border border border-neon-green/20 bg-neon-green/5 p-2">
+                                <div class="rounded-full border border-neon-green/20 bg-neon-green/5 p-2">
                                     <p id="artist-name-revealed"
-                                        class="text-xs uppercase tracking-[0.35em] text-neon-green  px-2">revealed</p>
+                                        class="text-xs uppercase tracking-[0.35em] text-neon-green px-2">revealed</p>
                                 </div>
                             </div>
                             <span class="text-xs uppercase tracking-[0.35em] text-neon-green" id="album-name"></span>
-
                         </div>
                     </section>
+
                     <!-- HINT 5-->
                     <section id="section-5-hidden" class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-6">
-                        <div class="flex flex-col gap-4 ">
-
+                        <div class="flex flex-col gap-4">
                             <div class="flex items-center justify-between w-full">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white">song snippet</p>
                                 <div class="rounded-full border border-[#ff4a6e]/50 bg-[#ff4a6e1f] p-2">
                                     <p id="album-cover-revealed"
                                         class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] px-2">Not revealed</p>
                                 </div>
-
                             </div>
-
                         </div>
                     </section>
+
                     <!-- HINT 5 Revealed-->
                     <section id="section-5-hint"
                         class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-6 hidden">
-                        <div class="flex flex-col gap-4 ">
+                        <div class="flex flex-col gap-4">
                             <div class="flex items-center justify-between w-full">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white">song snippet</p>
-                                <div class="rounded-full border border border-neon-green/20 bg-neon-green/5 p-2">
+                                <div class="rounded-full border border-neon-green/20 bg-neon-green/5 p-2">
                                     <p id="artist-name-revealed"
-                                        class="text-xs uppercase tracking-[0.35em] text-neon-green  px-2">revealed</p>
+                                        class="text-xs uppercase tracking-[0.35em] text-neon-green px-2">revealed</p>
                                 </div>
                             </div>
                             <div class="flex items-center justify-center w-full mt-4">
                                 <button id="play-snippet-button" onclick="playSnippet()"
                                     class="flex items-center gap-3 bg-neon-green/5 text-neon-green border border-neon-green/20 py-3 px-6 rounded-[28px] hover:shadow-[0_0_10px_#3Dff6e] transition-all duration-200">
-                                    <span id="play-label" class="text-xs uppercase tracking-[0.35em]">▶ Play
-                                        snippet</span>
+                                    <span id="play-label" class="text-xs uppercase tracking-[0.35em]">▶ Play snippet</span>
                                 </button>
                             </div>
-
                         </div>
                     </section>
+
                     <section>
                         <button onclick="NextHint()"
                             class="mt-4 w-full bg-neon-green/5 text-neon-green border border-neon-green/20 py-3 px-4 rounded-[28px] hover:shadow-[0_0_10px_#3Dff6e] transition-all duration-20">
                             Reveal Hint
                         </button>
                     </section>
+
                     <a onclick="showResultsOverlay(false)"
                         class="mt-2 mr-2 text-white/70 float-right hover:underline cursor-pointer">Give up?</a>
                 </div>
-            
             </section>
         </div>
     </main>
+
     <!-- RESULTS OVERLAY -->
     <div id="result-overlay"
         class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden">
-        <div class="bg-card-black border border-white/10 rounded-[28px] p-8 max-w-lg w-full mx-4 text-center ">
+        <div class="bg-card-black border border-white/10 rounded-[28px] p-8 max-w-lg w-full mx-4 text-center">
             <!-- FEEDBACK MESSAGE -->
             <h2 id="overlay-title" class="text-3xl font-bold text-white mb-2"></h2>
             <p id="overlay-subtitle" class="text-white/70 text-sm mt-2 mb-6"></p>
@@ -309,6 +308,7 @@
                         class="w-2/5 h-2/5 rounded-xl object-cover shrink-0">
                 </div>
             </section>
+
             <!-- POINTS -->
             <section class="mb-3 rounded-[28px] border border-white/10 bg-[#131318] p-4">
                 <div class="grid grid-cols-2 w-full text-center">
@@ -324,10 +324,11 @@
             </section>
 
             <!-- BUTTONS -->
-            <button onclick="" 
-                class="bg-white/5 text-white border border-white/20 py-3 px-6 rounded-[28px] hover:shadow-[0_0_10px_#3Dff6e] transition-all duration-200">
+            <a href="{{ url_for('select_artists') }}"
+                class="inline-block bg-white/5 text-white border border-white/20 py-3 px-6 rounded-[28px] hover:shadow-[0_0_10px_#3Dff6e] transition-all duration-200">
                 Select Artists
-            </button>
+            </a>
+
             <button onclick="playAgain()"
                 class="bg-neon-green/5 text-neon-green border border-neon-green/20 py-3 px-6 rounded-[28px] hover:shadow-[0_0_10px_#3Dff6e] transition-all duration-200">
                 Play Again
