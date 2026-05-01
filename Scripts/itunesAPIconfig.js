@@ -1,7 +1,12 @@
 let cacheArtistID = null;
 let cacheArtistName = null;
-const listOfArtists = ["Taylor swift", "Ed Sheeran", "Adele", "Drake", "Beyoncé", "The Weeknd", "Billie Eilish", "Bruno Mars", "Ariana Grande", "Justin Bieber"];
-let listOfSongs = [];
+const savedArtists = JSON.parse(localStorage.getItem("selectedArtists")) || [];
+let listOfArtists = [];
+for (let i = 0; i < savedArtists.length; i++) {
+    listOfArtists.push(savedArtists[i].name);}
+
+if (listOfArtists.length === 0) {
+        window.location.href = "./select-artist.html";}
 let listOfSongNames = [];
 let cacheSongDeets = null;
 let lettersInSong = [];
