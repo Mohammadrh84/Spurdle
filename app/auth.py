@@ -10,6 +10,7 @@ auth = Blueprint('auth', __name__)
 def sign_up():
     form = SignupForm()
     if form.validate_on_submit():
+        # check the database if the username already exists
         if User.query.filter_by(username=form.username.data).first():
             flash('Username already taken.', 'danger')
             return render_template('sign_up.html', form=form)
@@ -18,13 +19,13 @@ def sign_up():
         user = User(username=form.username.data, password=hashed_pw)
         db.session.add(user)
         db.session.flush()
-
+        # link the information to the user id
         stats = Stats(user_id=user.id)
         db.session.add(stats)
         db.session.commit()
 
         flash('Account created! Please log in.', 'success')
-        return redirect(url_for('main.select_artists'))
+        return redirect(url_for('auth.sign_in'))
 
     return render_template('sign_up.html', form=form)
 
@@ -33,6 +34,7 @@ def sign_up():
 def sign_in():
     form = LoginForm()
     if form.validate_on_submit():
+        # ensure user information aligns with what is on database
         user = User.query.filter_by(username=form.username.data).first()
         if user and check_password_hash(user.password, form.password.data):
             login_user(user)

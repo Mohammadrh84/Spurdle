@@ -21,10 +21,10 @@ def main_game():
 def leaderboard():
     return render_template('leaderboard.html')
 
-
+# retrieving album cover images when searching for artists
 def get_artist_image_from_itunes(artist_id):
     try:
-        response = requests.get("https://itunes.apple.com/lookup", params={"id": artist_id, "entity": "album", "limit": 3}, timeout=6)
+        response = requests.get("https://itunes.apple.com/lookup", params={"id": artist_id, "entity": "album", "limit": 1}, timeout=6)
         data = response.json()
         for result in data.get("results", []):
             artwork_url = result.get("artworkUrl100")
@@ -207,7 +207,9 @@ def artist_image():
     image = ""
     if res.get("artists"):
         image = res["artists"][0].get("strArtistThumb", "")
-    return jsonify({"image": image})
+        genre = res["artists"][0].get("strGenre", "")
+    return jsonify({"image": image,
+                    "genre": genre})
 
 
 def is_valid_song(song, artist_id):
@@ -219,6 +221,7 @@ def is_valid_song(song, artist_id):
     )
 
 def filter_song_name(name):
+    # filter out any text in brackets e.g (feat. Rick Ross) or empty area
     while '(' in name and ')' in name:
         start = name.find('(')
         end = name.find(')') + 1
@@ -239,6 +242,7 @@ def filter_song_name(name):
 @bp.route('/api/check-letters')
 def check_Letters():
     users_guess = request.args.get('user-guess', '')
+    # normalise guess to match same format as filtered names
     filtered_guess = users_guess.lower().replace(" ", "")
 
     song = session.get('random_song_details', {})
