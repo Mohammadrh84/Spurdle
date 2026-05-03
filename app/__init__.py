@@ -1,6 +1,10 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from .models import db
+from flask_login import LoginManager
+from .models import db, User
+from .auth import auth
+from .routes import bp
+
 
 def create_app():
     app = Flask(__name__)
@@ -11,7 +15,21 @@ def create_app():
 
     db.init_app(app)
 
-    from .routes import bp
+    # register blueprint for main game
     app.register_blueprint(bp)
+
+    # register blueprint for login, signup functionality
+    app.register_blueprint(auth)
+
+    with app.app_context():
+        db.create_all()
+
+
+    login_manager = LoginManager(app)
+    login_manager.login_view = 'auth.login'
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
 
     return app

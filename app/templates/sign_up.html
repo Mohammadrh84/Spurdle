@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+    <title>Spurdle</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{{ url_for('static', filename='tailwind-config.js') }}"></script>
+</head>
+<body class="bg-[url('https://i.pinimg.com/736x/04/87/40/048740932b7755d6086e54e7c8f31d06.jpg')] backdrop-blur-[100px] bg-cover bg-center bg-no-repeat">
+<div class="min-h-screen flex flex-col items-center">
+    <h1 class="font-syne text-[35px] text-white mt-[125px]">
+        <a href="{{ url_for('main.welcome') }}" class="text-white">spu</a><a href="{{ url_for('main.welcome') }}" class="text-neon-green">rdle</a>
+    </h1>
+
+    <div class="w-full max-w-md bg-card-black border border-neon-green p-8 rounded-lg mt-10">
+        <div class="text-center text-white">
+            <h2 class="text-2xl font-bold">Sign Up</h2>
+            <h5 class="text-md text-placeholder-gray">Enter your details below to create your account.</h5>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <p class="mt-4 text-center text-sm {{ 'text-neon-green' if category == 'success' else 'text-[#ff4a6e]' }}">{{ message }}</p>
+            {% endfor %}
+        {% endwith %}
+
+        <form method="POST" class="text-white mt-6 flex flex-col gap-4">
+            {{ form.hidden_tag() }}
+
+            <div>
+                {{ form.username.label(class="text-sm tracking-[0.5px]") }}
+                {{ form.username(class="w-full bg-input-gray text-white border border-input-border-gray focus:outline-none focus:ring focus:ring-neon-green focus:ring-opacity-30 focus:border-neon-green py-2 px-4 rounded-lg placeholder:text-placeholder-gray", placeholder="Username") }}
+            </div>
+
+            <div>
+                {{ form.password.label(class="text-sm tracking-[0.5px]") }}
+                {{ form.password(class="w-full bg-input-gray text-white border border-input-border-gray focus:outline-none focus:ring focus:ring-neon-green focus:ring-opacity-30 focus:border-neon-green py-2 px-4 rounded-lg placeholder:text-placeholder-gray", placeholder="•••••••••••") }}
+            </div>
+
+            <div>
+                {{ form.confirm.label(class="text-sm tracking-[0.5px]") }}
+                {{ form.confirm(class="w-full bg-input-gray text-white border border-input-border-gray focus:outline-none focus:ring focus:ring-neon-green focus:ring-opacity-30 focus:border-neon-green py-2 px-4 rounded-lg placeholder:text-placeholder-gray", placeholder="•••••••••••") }}
+            </div>
+
+            <div class="text-center">
+                {{ form.submit(class="bg-neon-green text-[#121219] font-bold py-2 px-6 rounded hover:scale-105 hover:shadow-[0_0_10px_#3Dff6e] transition-all duration-200") }}
+            </div>
+        </form>
+
+        <div class="text-center mt-2">
+            <h5 class="text-sm text-gray-400">Already have an account? <a href="{{ url_for('auth.sign_in') }}" class="text-neon-green hover:underline">Log in.</a></h5>
+        </div>
+    </div>
+</div>
+</body>
+</html>
