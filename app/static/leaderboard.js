@@ -1,31 +1,11 @@
-const players = [
-  { name: "John", points: 432532, streak: 1923, accuracy: 96, games: 184, avgHints: 1.3 },
-  { name: "Nathan", points: 320000, streak: 841, accuracy: 91, games: 167, avgHints: 1.8 },
-  { name: "Mohammad", points: 280000, streak: 522, accuracy: 89, games: 152, avgHints: 2.0 },
-  { name: "Dhruv", points: 250000, streak: 411, accuracy: 85, games: 141, avgHints: 2.2 },
-  { name: "Surtaj", points: 98450, streak: 48, accuracy: 79, games: 64, avgHints: 2.7 }
-];
-
-const totalPlayersStat = document.getElementById("totalPlayersStat");
-const topScoreStat = document.getElementById("topScoreStat");
-const bestStreakStat = document.getElementById("bestStreakStat");
-const avgAccuracyStat = document.getElementById("avgAccuracyStat");
-
-const podiumSection = document.getElementById("podiumSection");
-const tableBody = document.getElementById("leaderboardTableBody");
-const cardsContainer = document.getElementById("leaderboardCards");
-const playerDetail = document.getElementById("playerDetail");
-
-const searchInput = document.getElementById("searchInput");
-const sortSelect = document.getElementById("sortSelect");
-
+let players = [];
 let currentSort = "points";
 
 function formatNumber(number) {
-  return number.toLocaleString();
+  return Number(number || 0).toLocaleString();
 }
 
-function getVisiblePlayers() {
+function getVisiblePlayers(searchInput) {
   const searchText = searchInput.value.toLowerCase();
 
   let filteredPlayers = players.filter(function (player) {
@@ -57,33 +37,43 @@ function getGlobalTopPlayers() {
   return globalPlayers;
 }
 
-function updateStats(playerList) {
+function updateStats(playerList, elements) {
   if (playerList.length === 0) {
-    totalPlayersStat.textContent = "0";
-    topScoreStat.textContent = "0";
-    bestStreakStat.textContent = "0";
-    avgAccuracyStat.textContent = "0%";
+    elements.totalPlayersStat.textContent = "0";
+    elements.topScoreStat.textContent = "0";
+    elements.bestStreakStat.textContent = "0";
+    elements.avgAccuracyStat.textContent = "0%";
     return;
   }
 
-  totalPlayersStat.textContent = playerList.length;
-  topScoreStat.textContent = formatNumber(playerList[0].points);
+  elements.totalPlayersStat.textContent = playerList.length;
+  elements.topScoreStat.textContent = formatNumber(playerList[0].points);
 
-  let maxStreak = Math.max(...playerList.map(player => player.streak));
-  bestStreakStat.textContent = formatNumber(maxStreak);
+  const maxStreak = Math.max(...playerList.map(player => player.streak || 0));
+  elements.bestStreakStat.textContent = formatNumber(maxStreak);
 
   let totalAccuracy = 0;
+
   for (let player of playerList) {
-    totalAccuracy += player.accuracy;
+    totalAccuracy += player.accuracy || 0;
   }
 
-  let averageAccuracy = Math.round(totalAccuracy / playerList.length);
-  avgAccuracyStat.textContent = averageAccuracy + "%";
+  const averageAccuracy = Math.round(totalAccuracy / playerList.length);
+  elements.avgAccuracyStat.textContent = averageAccuracy + "%";
 }
 
-function updatePodium(playerList) {
+function updatePodium(playerList, podiumSection) {
   const topThree = playerList.slice(0, 3);
   podiumSection.innerHTML = "";
+
+  if (topThree.length === 0) {
+    podiumSection.innerHTML = `
+      <div class="rounded-[24px] border border-white/10 bg-white/5 p-5 md:col-span-3">
+        <p class="text-sm text-white/60">No leaderboard data yet. Play a game to create the first score.</p>
+      </div>
+    `;
+    return;
+  }
 
   topThree.forEach(function (player, index) {
     const card = document.createElement("div");
@@ -93,14 +83,14 @@ function updatePodium(playerList) {
       <p class="text-xs uppercase tracking-[0.22em] text-white/45">Top ${index + 1}</p>
       <h3 class="mt-3 text-2xl font-bold">${player.name}</h3>
       <p class="mt-2 text-neon-green font-semibold">${formatNumber(player.points)} points</p>
-      <p class="mt-1 text-sm text-white/60">${player.streak} day streak</p>
+      <p class="mt-1 text-sm text-white/60">${formatNumber(player.streak)} streak</p>
     `;
 
     podiumSection.appendChild(card);
   });
 }
 
-function updatePlayerDetail(playerList) {
+function updatePlayerDetail(playerList, playerDetail) {
   if (playerList.length === 0) {
     playerDetail.innerHTML = `<p class="text-sm text-white/60">No players found.</p>`;
     return;
@@ -112,13 +102,24 @@ function updatePlayerDetail(playerList) {
     <p class="text-xs uppercase tracking-[0.25em] text-neon-green/80">Current top player</p>
     <h3 class="mt-3 text-2xl font-bold">${topPlayer.name}</h3>
     <p class="mt-2 text-white/70">
-      ${formatNumber(topPlayer.points)} points · ${topPlayer.streak} streak · ${topPlayer.accuracy}% accuracy
+      ${formatNumber(topPlayer.points)} points · ${formatNumber(topPlayer.streak)} streak · ${topPlayer.accuracy}% accuracy
     </p>
   `;
 }
 
-function updateTable(playerList) {
+function updateTable(playerList, tableBody) {
   tableBody.innerHTML = "";
+
+  if (playerList.length === 0) {
+    tableBody.innerHTML = `
+      <tr>
+        <td colspan="7" class="rounded-2xl px-4 py-6 text-center text-white/60 bg-white/5">
+          No players found.
+        </td>
+      </tr>
+    `;
+    return;
+  }
 
   playerList.forEach(function (player, index) {
     const row = document.createElement("tr");
@@ -128,9 +129,9 @@ function updateTable(playerList) {
       <td class="rounded-l-2xl px-4 py-4 font-bold">${index + 1}</td>
       <td class="px-4 py-4 font-semibold">${player.name}</td>
       <td class="px-4 py-4">${formatNumber(player.points)}</td>
-      <td class="px-4 py-4">${player.streak}</td>
+      <td class="px-4 py-4">${formatNumber(player.streak)}</td>
       <td class="px-4 py-4">${player.accuracy}%</td>
-      <td class="px-4 py-4">${player.games}</td>
+      <td class="px-4 py-4">${formatNumber(player.games)}</td>
       <td class="rounded-r-2xl px-4 py-4">${player.avgHints}</td>
     `;
 
@@ -138,8 +139,17 @@ function updateTable(playerList) {
   });
 }
 
-function updateCards(playerList) {
+function updateCards(playerList, cardsContainer) {
   cardsContainer.innerHTML = "";
+
+  if (playerList.length === 0) {
+    cardsContainer.innerHTML = `
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-4 text-white/60">
+        No players found.
+      </div>
+    `;
+    return;
+  }
 
   playerList.forEach(function (player, index) {
     const card = document.createElement("div");
@@ -149,31 +159,63 @@ function updateCards(playerList) {
       <p class="text-xs uppercase tracking-[0.2em] text-white/45">#${index + 1}</p>
       <h3 class="mt-2 text-xl font-bold">${player.name}</h3>
       <p class="mt-2 text-neon-green font-semibold">${formatNumber(player.points)} points</p>
-      <p class="mt-1 text-sm text-white/60">${player.streak} streak · ${player.accuracy}% accuracy</p>
+      <p class="mt-1 text-sm text-white/60">${formatNumber(player.streak)} streak · ${player.accuracy}% accuracy</p>
     `;
 
     cardsContainer.appendChild(card);
   });
 }
 
-function renderLeaderboard() {
-  const visiblePlayers = getVisiblePlayers();
+function renderLeaderboard(elements) {
+  const visiblePlayers = getVisiblePlayers(elements.searchInput);
   const globalTopPlayers = getGlobalTopPlayers();
 
-  updateStats(visiblePlayers);
-  updatePodium(globalTopPlayers);
-  updatePlayerDetail(visiblePlayers);
-  updateTable(visiblePlayers);
-  updateCards(visiblePlayers);
+  updateStats(visiblePlayers, elements);
+  updatePodium(globalTopPlayers, elements.podiumSection);
+  updatePlayerDetail(visiblePlayers, elements.playerDetail);
+  updateTable(visiblePlayers, elements.tableBody);
+  updateCards(visiblePlayers, elements.cardsContainer);
 }
 
-searchInput.addEventListener("input", function () {
-  renderLeaderboard();
-});
+async function loadLeaderboard(elements) {
+  try {
+    const response = await fetch('/api/leaderboard');
+    players = await response.json();
 
-sortSelect.addEventListener("change", function () {
-  currentSort = sortSelect.value;
-  renderLeaderboard();
-});
+    if (!Array.isArray(players)) {
+      players = [];
+    }
 
-renderLeaderboard();
+    renderLeaderboard(elements);
+  } catch (error) {
+    console.error("Could not load leaderboard:", error);
+    players = [];
+    renderLeaderboard(elements);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  const elements = {
+    totalPlayersStat: document.getElementById("totalPlayersStat"),
+    topScoreStat: document.getElementById("topScoreStat"),
+    bestStreakStat: document.getElementById("bestStreakStat"),
+    avgAccuracyStat: document.getElementById("avgAccuracyStat"),
+    podiumSection: document.getElementById("podiumSection"),
+    tableBody: document.getElementById("leaderboardTableBody"),
+    cardsContainer: document.getElementById("leaderboardCards"),
+    playerDetail: document.getElementById("playerDetail"),
+    searchInput: document.getElementById("searchInput"),
+    sortSelect: document.getElementById("sortSelect")
+  };
+
+  elements.searchInput.addEventListener("input", function () {
+    renderLeaderboard(elements);
+  });
+
+  elements.sortSelect.addEventListener("change", function () {
+    currentSort = elements.sortSelect.value;
+    renderLeaderboard(elements);
+  });
+
+  loadLeaderboard(elements);
+});
