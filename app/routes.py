@@ -5,7 +5,7 @@ import json
 import requests
 import random
 
-from .models import db, User, Game, Stats
+from .models import db, User, Game, Stats, SelectedArtist
 
 
 bp = Blueprint('main', __name__)
@@ -136,6 +136,33 @@ def parse_selected_artists(raw_selected_artists):
     return selected_artists
 
 
+def get_saved_selected_artists_for_current_user():
+    saved_artists = (
+        SelectedArtist.query
+        .filter_by(user_id=current_user.id)
+        .order_by(SelectedArtist.id.asc())
+        .all()
+    )
+
+    return [artist.to_dict() for artist in saved_artists]
+
+
+def replace_saved_selected_artists_for_current_user(selected_artists):
+    SelectedArtist.query.filter_by(user_id=current_user.id).delete()
+
+    for artist in selected_artists:
+        saved_artist = SelectedArtist(
+            user_id=current_user.id,
+            artist_id=artist["id"],
+            artist_name=artist["name"],
+            artist_image=artist["image"]
+        )
+
+        db.session.add(saved_artist)
+
+    db.session.commit()
+
+
 @bp.route('/api/search-artists')
 def search_artists():
     search_term = request.args.get('term', '').strip()
@@ -198,14 +225,18 @@ def artist_image_by_id():
 @bp.route('/select_artists', methods=['GET', 'POST'])
 @login_required
 def select_artists():
-    selected_artists = session.get('selected_artists', [])
+    selected_artists = get_saved_selected_artists_for_current_user()
     error_message = None
 
     if request.method == 'POST':
         form_action = request.form.get('form_action')
 
         if form_action == 'clear':
+            SelectedArtist.query.filter_by(user_id=current_user.id).delete()
+            db.session.commit()
+
             session.pop('selected_artists', None)
+
             flash("Selected artists cleared.", "neutral")
             return redirect(url_for('main.select_artists'))
 
@@ -216,7 +247,12 @@ def select_artists():
         if len(selected_artists) == 0:
             error_message = "Please select at least one artist before saving."
         else:
+            replace_saved_selected_artists_for_current_user(selected_artists)
+
+            # Keep session copy temporarily so the current game flow still works.
+            # Step 4C will update the API to load directly from the database.
             session['selected_artists'] = selected_artists
+
             flash("Selected artists saved.", "success")
             return redirect(url_for('main.select_artists'))
 
@@ -502,8 +538,6 @@ def save_score():
     guesses = safe_int(data.get('guesses'), 0)
     correct = bool(data.get('correct', False))
 
-    # Browser/client data can be changed, so use the server-side session
-    # points as the maximum trusted score.
     server_points = safe_int(session.get('current_points'), 0)
 
     score = client_score
