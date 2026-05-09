@@ -123,7 +123,7 @@ function updateSaveButton() {
   } else {
     saveArtistsButton.disabled = false;
     saveArtistsButton.className =
-      "w-full rounded-full bg-neon-green px-4 py-3 font-bold text-black transition hover:scale-105 md:w-64";
+      "w-full rounded-full bg-neon-green/5 border border-neon-green/30 px-4 py-3 font-bold text-neon-green transition hover:bg-neon-green hover:text-black cursor-pointer md:w-64";
 
     clearArtistsButton.classList.remove("hidden");
 
