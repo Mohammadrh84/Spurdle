@@ -127,8 +127,8 @@ function updateSaveButton() {
 
     clearArtistsButton.classList.remove("hidden");
 
-    saveArtistsMessage.textContent = "Ready to save selected artists.";
-    saveArtistsMessage.className = "text-center text-sm text-neon-green/80";
+    saveArtistsMessage.textContent = "Your artists will be saved for next time!";
+    saveArtistsMessage.className = "text-center text-sm text-white/50";
   }
 
   if (hasReachedArtistLimit()) {

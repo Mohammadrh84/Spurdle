@@ -156,20 +156,10 @@
                         class="w-full rounded-full bg-white/10 px-4 py-3 font-bold text-white/40 cursor-not-allowed transition md:w-64"
                         disabled
                     >
-                        Save selected artists
+                        Start Game
                     </button>
 
-                    {% if selected_artists|length > 0 %}
-                        <a
-                            id="startGameLink"
-                            href="{{ url_for('main.main_game') }}"
-                            class="inline-flex justify-center rounded-full bg-neon-green px-5 py-2 text-sm font-bold text-black transition hover:scale-105"
-                        >
-                            Start game
-                        </a>
-                    {% endif %}
-
-                    <p id="saveArtistsMessage" class="text-center text-sm text-white/50">
+                    <p id="saveArtistsMessage" class="text-center text-sm text-[#ff4a6e]">
                         Select at least one artist to continue.
                     </p>
                 </div>
