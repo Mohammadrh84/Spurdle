@@ -5,23 +5,36 @@ function formatNumber(number) {
   return Number(number || 0).toLocaleString();
 }
 
+function escapeHtml(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function getPlayerName(player) {
+  return String(player.name || "Unknown player");
+}
+
 function getVisiblePlayers(searchInput) {
   const searchText = searchInput.value.toLowerCase();
 
   let filteredPlayers = players.filter(function (player) {
-    return player.name.toLowerCase().includes(searchText);
+    return getPlayerName(player).toLowerCase().includes(searchText);
   });
 
   filteredPlayers.sort(function (a, b) {
     if (currentSort === "streak") {
-      return b.streak - a.streak;
+      return (b.streak || 0) - (a.streak || 0);
     }
 
     if (currentSort === "accuracy") {
-      return b.accuracy - a.accuracy;
+      return (b.accuracy || 0) - (a.accuracy || 0);
     }
 
-    return b.points - a.points;
+    return (b.points || 0) - (a.points || 0);
   });
 
   return filteredPlayers;
@@ -31,7 +44,7 @@ function getGlobalTopPlayers() {
   const globalPlayers = [...players];
 
   globalPlayers.sort(function (a, b) {
-    return b.points - a.points;
+    return (b.points || 0) - (a.points || 0);
   });
 
   return globalPlayers;
@@ -76,12 +89,14 @@ function updatePodium(playerList, podiumSection) {
   }
 
   topThree.forEach(function (player, index) {
+    const safeName = escapeHtml(getPlayerName(player));
+
     const card = document.createElement("div");
     card.className = "rounded-[24px] border border-white/10 bg-white/5 p-5";
 
     card.innerHTML = `
       <p class="text-xs uppercase tracking-[0.22em] text-white/45">Top ${index + 1}</p>
-      <h3 class="mt-3 text-2xl font-bold">${player.name}</h3>
+      <h3 class="mt-3 text-2xl font-bold">${safeName}</h3>
       <p class="mt-2 text-neon-green font-semibold">${formatNumber(player.points)} points</p>
       <p class="mt-1 text-sm text-white/60">${formatNumber(player.streak)} streak</p>
     `;
@@ -97,10 +112,11 @@ function updatePlayerDetail(playerList, playerDetail) {
   }
 
   const topPlayer = playerList[0];
+  const safeName = escapeHtml(getPlayerName(topPlayer));
 
   playerDetail.innerHTML = `
     <p class="text-xs uppercase tracking-[0.25em] text-neon-green/80">Current top player</p>
-    <h3 class="mt-3 text-2xl font-bold">${topPlayer.name}</h3>
+    <h3 class="mt-3 text-2xl font-bold">${safeName}</h3>
     <p class="mt-2 text-white/70">
       ${formatNumber(topPlayer.points)} points · ${formatNumber(topPlayer.streak)} streak · ${topPlayer.accuracy}% accuracy
     </p>
@@ -122,12 +138,14 @@ function updateTable(playerList, tableBody) {
   }
 
   playerList.forEach(function (player, index) {
+    const safeName = escapeHtml(getPlayerName(player));
+
     const row = document.createElement("tr");
     row.className = "bg-white/5 hover:bg-white/10 transition";
 
     row.innerHTML = `
       <td class="rounded-l-2xl px-4 py-4 font-bold">${index + 1}</td>
-      <td class="px-4 py-4 font-semibold">${player.name}</td>
+      <td class="px-4 py-4 font-semibold">${safeName}</td>
       <td class="px-4 py-4">${formatNumber(player.points)}</td>
       <td class="px-4 py-4">${formatNumber(player.streak)}</td>
       <td class="px-4 py-4">${player.accuracy}%</td>
@@ -152,12 +170,14 @@ function updateCards(playerList, cardsContainer) {
   }
 
   playerList.forEach(function (player, index) {
+    const safeName = escapeHtml(getPlayerName(player));
+
     const card = document.createElement("div");
     card.className = "rounded-2xl border border-white/10 bg-white/5 p-4";
 
     card.innerHTML = `
       <p class="text-xs uppercase tracking-[0.2em] text-white/45">#${index + 1}</p>
-      <h3 class="mt-2 text-xl font-bold">${player.name}</h3>
+      <h3 class="mt-2 text-xl font-bold">${safeName}</h3>
       <p class="mt-2 text-neon-green font-semibold">${formatNumber(player.points)} points</p>
       <p class="mt-1 text-sm text-white/60">${formatNumber(player.streak)} streak · ${player.accuracy}% accuracy</p>
     `;
