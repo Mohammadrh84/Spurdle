@@ -2,7 +2,6 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_wtf.csrf import CSRFProtect
 
-from .config import Config
 from .models import db, User
 from .auth import auth
 from .routes import bp
@@ -14,7 +13,9 @@ csrf = CSRFProtect()
 def create_app():
     app = Flask(__name__)
 
-    app.config.from_object(Config)
+    app.config["SECRET_KEY"] = "dev-secret-key"
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///game.db"
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     db.init_app(app)
     csrf.init_app(app)
@@ -29,6 +30,8 @@ def create_app():
         db.create_all()
 
     login_manager = LoginManager(app)
+
+    # This must match the real auth route function name in auth.py
     login_manager.login_view = "auth.sign_in"
 
     @login_manager.user_loader
