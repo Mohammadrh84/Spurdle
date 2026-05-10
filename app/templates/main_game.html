@@ -15,15 +15,15 @@
 
 <body class="bg-background-black bg-cover bg-center bg-no-repeat min-h-screen">
     <nav class="flex items-center justify-between px-8 border-b border-white/10">
-        <a href="{{ url_for('main.main_game') }}" class="font-syne text-[35px] text-white cursor-pointer">
+        <a href="{{ url_for('main.welcome') }}" class="font-syne text-[35px] text-white cursor-pointer">
             <span class="text-white">spu</span><span class="text-neon-green">rdle</span>
         </a>
 
         <div class="flex items-center gap-6 font-semibold text-sm">
             <a href="{{ url_for('main.how_to_play') }}" class="text-white transition hover:text-neon-green">How to Play</a>
             <a href="{{ url_for('main.leaderboard') }}" class="text-white transition hover:text-neon-green">Leaderboard</a>
-            <a href="{{ url_for('auth.logout') }}" class="text-white transition hover:text-neon-green">Logout</a>
             <a href="{{ url_for('main.select_artists') }}" class="rounded-xl pr-4 py-2 text-white transition hover:text-neon-green">Artist Select</a>
+            <a href="{{ url_for('auth.logout') }}" class="text-white transition hover:text-neon-green">Logout</a>
         </div>
     </nav>
 

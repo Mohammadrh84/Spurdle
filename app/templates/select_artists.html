@@ -15,16 +15,17 @@
     <main class="max-w-6xl mx-auto px-4 py-6 md:px-8 lg:px-12">
         <header class="rounded-[28px] border border-white/10 bg-black/40 p-4 shadow-[0_0_30px_rgba(0,0,0,0.25)] md:p-6">
             <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <a href="{{ url_for('main.main_game') }}" class="inline-block">
+                <a href="{{ url_for('main.welcome') }}" class="inline-block">
                     <h1 class="font-syne text-5xl leading-none md:text-6xl">
                         <span class="text-white">spu</span><span class="text-neon-green">rdle</span>
                     </h1>
                 </a>
 
                 <nav class="flex flex-wrap items-center gap-3 text-sm font-semibold md:gap-6">
-                    <a href="{{ url_for('main.leaderboard') }}" class="transition hover:text-neon-green">Leaderboard</a>
-                    <a href="{{ url_for('auth.logout') }}" class="text-white transition hover:text-neon-green">Logout</a>
-                    <a href="{{ url_for('main.select_artists') }}" class="rounded-xl pr-4 py-2 text-neon-green">Artist Select</a>
+                    <a href="{{ url_for('main.how_to_play') }}" class="text-white transition hover:text-neon-green">How to Play</a>
+                    <a href="{{ url_for('main.leaderboard') }}" class="text-white transition hover:text-neon-green">Leaderboard</a>
+                    <a href="{{ url_for('main.select_artists') }}" class="rounded-xl text-neon-green">Artist Select</a>
+                    <a href="{{ url_for('auth.logout') }}" class="text-white pr-4 py-2 transition hover:text-neon-green">Sign Out</a>
                 </nav>
             </div>
 
@@ -153,7 +154,7 @@
                         type="submit"
                         name="form_action"
                         value="save"
-                        class="w-full rounded-full bg-neon-green/5 text-neon-green border border-neon-green/30 px-4 py-3 text-md font-bold cursor-not-allowed transition md:w-64 hover:bg-neon-green transition-all duration-200 hover:text-black cursor-pointer"
+                        class="w-full rounded-full bg-white/10 px-4 py-3 font-bold text-white/40 cursor-not-allowed transition md:w-64"
                         disabled
                     >
                         Start Game
