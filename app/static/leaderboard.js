@@ -112,14 +112,27 @@ function updatePlayerDetail(playerList, playerDetail) {
     return;
   }
 
-  const topPlayer = playerList[0]; 
-  const safeName = escapeHtml(getPlayerName(topPlayer));
+  var currentPlayer = null;
+
+  for (var i = 0; i < players.length; i++) {
+    if (getPlayerName(players[i]) === Current_Username) {
+      currentPlayer = players[i];
+      break;
+    }
+  }
+
+  if (currentPlayer === null) {
+    playerDetail.innerHTML = `<p class="text-sm text-white/60">Sign in to see your statistics.</p>`;
+    return;
+  }
+
+  const safeName = escapeHtml(getPlayerName(currentPlayer));
 
   playerDetail.innerHTML = `
     <p class="text-xs uppercase tracking-[0.25em] text-neon-green/80">Your statistics</p>
     <h3 class="mt-3 text-2xl font-bold">${safeName}</h3>
     <p class="mt-2 text-white/70">
-      ${formatNumber(topPlayer.points)} points · ${formatNumber(topPlayer.streak)} streak · ${topPlayer.accuracy}% accuracy
+      ${formatNumber(currentPlayer.points)} points · ${formatNumber(currentPlayer.streak)} streak · ${currentPlayer.accuracy}% accuracy
     </p>
   `;
 }

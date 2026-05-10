@@ -646,12 +646,7 @@ def leaderboard_data():
 @bp.route('/api/current-user')
 def current_user_info():
     if current_user.is_authenticated:
-        return jsonify({
-            "username": current_user.username,
-            "points": current_user.stats.total_points if current_user.stats else 0,
-            "streak": calculate_current_streak(current_user.id),
-            "accuracy": round((current_user.stats.accuracy if current_user.stats else 0) * 100, 1)
-                        })
+        return jsonify({"username": current_user.username})
     return jsonify({"username": None})
 
 @bp.route('/api/reset')
