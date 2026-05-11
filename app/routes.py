@@ -125,7 +125,13 @@ def parse_selected_artists(raw_selected_artists):
         if clean_artist is None:
             continue
 
-        if clean_artist["id"] in seen_artist_ids:
+        artist_id = clean_artist.get("id")
+
+        # reject invalid ids
+        if artist_id is None:
+            continue
+
+        if artist_id in seen_artist_ids:
             continue
 
         selected_artists.append(clean_artist)
