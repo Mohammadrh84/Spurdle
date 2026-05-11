@@ -92,7 +92,7 @@ function setImageIfElementExists(elementId, imageUrl) {
 }
 
 function setAlbumNAmeHint(albumName) {
-    setTextIfElementExists('album-name', albumName || "Unknown album")
+    setTextIfElementExists('album-name', albumName || "Unknown album");
 }
 
 async function getAlbumTrackCount(collectionID) {
@@ -101,7 +101,7 @@ async function getAlbumTrackCount(collectionID) {
     }
 
     try {
-        const response = await fetch ('/api/album-track-count?collection_id=${collectionID}');
+        const response = await fetch('/api/album-track-count?collection_id=${collectionID}');
         const data = await response.json();
 
         return data.trackCount || 0;
@@ -114,7 +114,7 @@ async function getAlbumTrackCount(collectionID) {
 async function GetRandomSong() {
     const res = await fetch('/api/random-song?' + getArtistParams());
     const songDeets = await res.json();
-    const collectionID = songDeets.collectionID
+    const collectionID = songDeets.collectionid;
     const trackCount = await getAlbumTrackCount(collectionID);
 
     if (songDeets.error) {
@@ -131,7 +131,10 @@ async function GetRandomSong() {
     ]);
 
     setImageIfElementExists('album-cover', artwork.value);
-    if (trackCount == 1) {
+
+    const albumTitle = albumNAme.value || "Unknown album";
+
+    if (trackCount == 1 || albumTitle.toLowerCase().includes("single")) {
         setAlbumNAmeHint("This song is a sinlge");
     } else {
         setAlbumNAmeHint(albumName.value)
