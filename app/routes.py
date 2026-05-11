@@ -354,6 +354,36 @@ def song_details():
         "value": session.get('random_song_details', {}).get(argument)
     })
 
+@bp.route('/api/album-track-count')
+@login_required
+def album_track_count():
+    collection_id = request.args.get('collection_id')
+
+    if not collection_id:
+        return jsonify({"tracCount"})
+    
+    try:
+        response = requests.get(
+            "https://itunes.apple.com/lookup",
+            params={
+                "id": collection_id,
+                "entity": "song"
+            },
+            timeout=10
+        )
+
+        results = response.json().get("results", [])
+    
+    except (requests.RequestException, ValueError):
+        return jsonify({"trackCount": 0})
+    
+    track_count = 0
+
+    for item in results:
+        if item.get("wrapperType") == "track":
+            track_count += 1
+    
+    return jsonify({"trackCount": track_count})
 
 @bp.route('/api/artist-image')
 def artist_image():
