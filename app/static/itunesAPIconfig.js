@@ -91,6 +91,9 @@ function setImageIfElementExists(elementId, imageUrl) {
     }
 }
 
+function setAlbumNAmeHint(albumName) {
+    setTextIfElementExists('album-name', albumName || "Unknown album")
+}
 
 async function GetRandomSong() {
     const res = await fetch('/api/random-song?' + getArtistParams());
@@ -110,7 +113,7 @@ async function GetRandomSong() {
     ]);
 
     setImageIfElementExists('album-cover', artwork.value);
-    setTextIfElementExists('album-name', albumName.value || "Unknown album");
+    setAlbumNAmeHint(albumName.value);
 
     if (releaseDate.value) {
         const formattedDate = new Date(releaseDate.value).toLocaleDateString('en-GB', {
