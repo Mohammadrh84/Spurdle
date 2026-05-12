@@ -686,6 +686,7 @@ def register_game():
     return jsonify({"message": "Game registered."})
 
 @bp.route('/api/current-user')
-@login_required
 def current_user_info():
-    return jsonify({"username": current_user.username})
+    if current_user.is_authenticated:
+        return jsonify({"username": current_user.username})
+    return jsonify({"username": None})
