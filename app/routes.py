@@ -347,13 +347,6 @@ def random_song():
 
     session['random_song_details'] = random.choice(songs)
 
-    game = Game(user_id=current_user.id, score=0, hints=0, guesses=0, correct=False)
-    db.session.add(game)
-    db.session.flush()
-    session['game_id'] = game.id
-    update_stats_for_user(current_user.id)
-    db.session.commit()
-
     return jsonify(session['random_song_details'])
 
 
