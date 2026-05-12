@@ -347,7 +347,8 @@ def random_song():
         return jsonify({"error": "No songs found for this artist."}), 404
 
     session['random_song_details'] = random.choice(songs)
-
+    print(session['random_song_details']['trackName'])
+    session['points_disabled'] = len(songs) < 10
     return jsonify(session['random_song_details'])
 
 
@@ -465,6 +466,13 @@ def calculate_points():
     type_of_points = int(request.args.get('type'))
     current_hint = int(request.args.get('current-hint'))
 
+    if session.get('points_disabled'):
+        return jsonify({
+            "CurrentPoints": 0,
+            "GuessStatus": user_guess == song_name and user_guess != "" and song_name != "",
+            "GameStatus": user_guess == song_name and user_guess != "" and song_name != ""
+        })
+
     if type_of_points == 0:
         current_points -= 3
     elif type_of_points == 1:
@@ -533,6 +541,9 @@ def calculate_current_streak(user_id):
 @bp.route('/api/save-score', methods=['POST'])
 @login_required
 def save_score():
+    if session.get('points_disabled'):
+        return jsonify({"message": "Small artist. Score not affected."}), 200
+
     data = request.get_json() or {}
 
     client_score = safe_int(data.get('score'), 0)
@@ -647,6 +658,8 @@ def reset_game():
     session['num_guesses'] = 0
     session['letters_correct'] = []
     session['letters_wrong'] = []
+    session['game_registered'] = False
+    session['points_disabled'] = False
 
     return jsonify({
         "message": "Game reset successfully"
@@ -655,6 +668,9 @@ def reset_game():
 @bp.route('/api/register-game', methods=['POST'])
 @login_required
 def register_game():
+    if session.get('points_disabled'):
+        return jsonify({"message": "Small artist. Score not affected."}), 200
+    
     if session.get('game_registered'):
         return jsonify({"message": "Already registered."}), 200
 

@@ -148,6 +148,14 @@ async function GetRandomSong() {
     } else {
         listOfSongNames = [];
     }
+
+    if (listOfSongNames.length < 10) {
+    const container = document.getElementById('small-artist-warning');
+    const p = document.createElement('p');
+    p.textContent = "This artist has less than 10 songs. To maintain fairness, songs from this artists will not award points!";
+    p.className = "mt-1 text-sm rounded-full py-2 px-4 text-[#ff4a6e] border border-[#ff4a6e]/50 bg-[#ff4a6e1f]";
+    container.appendChild(p);
+}
 }
 
 
