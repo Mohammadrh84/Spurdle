@@ -347,7 +347,6 @@ def random_song():
         return jsonify({"error": "No songs found for this artist."}), 404
 
     session['random_song_details'] = random.choice(songs)
-    print(session['random_song_details']['trackName'])
     session['points_disabled'] = len(songs) < 10
     return jsonify(session['random_song_details'])
 
