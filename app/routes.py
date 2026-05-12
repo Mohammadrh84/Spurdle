@@ -311,6 +311,7 @@ def random_song():
     session['letters_wrong'] = []
     session['current_points'] = 100
     session['num_guesses'] = 0
+    session['game_registered'] = False 
 
     artist_name = request.args.get('artist')
     artist_id = request.args.get('artist_id')
@@ -578,11 +579,7 @@ def save_score():
         )
         db.session.add(stats)
 
-    games_played = (
-        Game.query
-        .filter_by(user_id=current_user.id)
-        .count()
-    )
+    games_played = stats.games_played
 
     correct_games = (
         Game.query
@@ -603,8 +600,8 @@ def save_score():
     )
 
     stats.total_points = int(total_points or 0)
-    stats.games_played = games_played
-    stats.accuracy = correct_games / games_played if games_played > 0 else 0
+    #stats.games_played = games_played
+    stats.accuracy = correct_games / stats.games_played if stats.games_played > 0 else 0
     stats.avg_hints = float(avg_hints or 0)
 
     db.session.commit()
@@ -643,12 +640,6 @@ def leaderboard_data():
 
     return jsonify(leaderboard)
 
-@bp.route('/api/current-user')
-def current_user_info():
-    if current_user.is_authenticated:
-        return jsonify({"username": current_user.username})
-    return jsonify({"username": None})
-
 @bp.route('/api/reset')
 @login_required
 def reset_game():
@@ -660,3 +651,26 @@ def reset_game():
     return jsonify({
         "message": "Game reset successfully"
     })
+
+@bp.route('/api/register-game', methods=['POST'])
+@login_required
+def register_game():
+    if session.get('game_registered'):
+        return jsonify({"message": "Already registered."}), 200
+
+    session['game_registered'] = True
+
+    stats = Stats.query.filter_by(user_id=current_user.id).first()
+    if stats is None:
+        stats = Stats(user_id=current_user.id, total_points=0, accuracy=0, games_played=0, avg_hints=0)
+        db.session.add(stats)
+
+    stats.games_played += 1
+    db.session.commit()
+
+    return jsonify({"message": "Game registered."})
+
+@bp.route('/api/current-user')
+@login_required
+def current_user_info():
+    return jsonify({"username": current_user.username})
