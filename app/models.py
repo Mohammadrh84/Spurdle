@@ -58,6 +58,12 @@ class Stats(db.Model):
     # Running average of hints used
     avg_hints = db.Column(db.Float, default=0)
 
+    # Current winning streak for the user
+    current_streak = db.Column(db.Integer, default=0)
+
+    # Best winning streak reached by the user
+    best_streak = db.Column(db.Integer, default=0)
+
 
 class SelectedArtist(db.Model):
     id = db.Column(db.Integer, primary_key=True)

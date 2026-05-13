@@ -600,7 +600,9 @@ def save_score():
             total_points=0,
             accuracy=0,
             games_played=0,
-            avg_hints=0
+            avg_hints=0,
+            current_streak=0,
+            best_streak=0
         )
         db.session.add(stats)
 
@@ -628,10 +630,16 @@ def save_score():
         .scalar()
     )
 
+    current_streak = calculate_current_streak(current_user.id)
+
     stats.total_points = int(total_points or 0)
     stats.games_played = games_played
     stats.accuracy = correct_games / games_played if games_played > 0 else 0
     stats.avg_hints = float(avg_hints or 0)
+    stats.current_streak = current_streak
+
+    if current_streak > (stats.best_streak or 0):
+        stats.best_streak = current_streak
 
     db.session.commit()
 
@@ -642,7 +650,8 @@ def save_score():
         "games_played": stats.games_played,
         "accuracy": round(stats.accuracy * 100, 1),
         "avg_hints": round(stats.avg_hints, 1),
-        "streak": calculate_current_streak(current_user.id)
+        "streak": stats.current_streak,
+        "best_streak": stats.best_streak
     })
 
 
@@ -661,7 +670,7 @@ def leaderboard_data():
         leaderboard.append({
             "name": user.username,
             "points": stats.total_points or 0,
-            "streak": calculate_current_streak(user.id),
+            "streak": stats.current_streak or 0,
             "accuracy": round((stats.accuracy or 0) * 100, 1),
             "games": stats.games_played or 0,
             "avgHints": round(stats.avg_hints or 0, 1)
