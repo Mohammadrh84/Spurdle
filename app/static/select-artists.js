@@ -123,12 +123,12 @@ function updateSaveButton() {
   } else {
     saveArtistsButton.disabled = false;
     saveArtistsButton.className =
-      "w-full rounded-full bg-neon-green px-4 py-3 font-bold text-black transition hover:scale-105 md:w-64";
+      "w-full rounded-full bg-neon-green/5 border border-neon-green/30 px-4 py-3 font-bold text-neon-green transition hover:bg-neon-green hover:text-black cursor-pointer md:w-64";
 
     clearArtistsButton.classList.remove("hidden");
 
-    saveArtistsMessage.textContent = "Ready to save selected artists.";
-    saveArtistsMessage.className = "text-center text-sm text-neon-green/80";
+    saveArtistsMessage.textContent = "Your artists will be saved for next time!";
+    saveArtistsMessage.className = "text-center text-sm text-white/50";
   }
 
   if (hasReachedArtistLimit()) {
@@ -149,7 +149,7 @@ function renderSelectedArtists() {
 
   if (chosenArtists.length === 0) {
     selectedArtists.innerHTML = `
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-4 text-white/60">
+      <div class="rounded-full border border-white/10 bg-white/5 p-4 text-white/60">
         No artists selected yet.
       </div>
     `;
@@ -165,7 +165,7 @@ function renderSelectedArtists() {
     const chip = document.createElement("div");
 
     chip.className =
-      "flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-2 py-2 pr-3";
+      "group flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-2 py-2 pr-3 transition hover:border-[#ff4a6e] hover:bg-[#ff4a6e1f] cursor-pointer";
 
     chip.innerHTML = `
       <img
@@ -174,13 +174,13 @@ function renderSelectedArtists() {
         class="w-10 h-10 rounded-full object-cover shrink-0 bg-black/20"
       >
 
-      <span class="max-w-[170px] truncate text-sm font-semibold text-white">
+      <span class="max-w-[170px] truncate text-sm font-semibold text-white group-hover:text-[#ff4a6e] transition">
         ${escapeHtml(artist.name)}
       </span>
 
       <button
         type="button"
-        class="flex h-8 w-8 items-center justify-center rounded-full bg-black/30 text-sm font-bold text-white transition hover:text-neon-green"
+        class="flex h-8 w-8 items-center justify-center rounded-full bg-black/30 text-sm font-bold text-white group-hover:text-[#ff4a6e] transition"
         aria-label="Remove ${escapeHtml(artist.name)}"
       >
         ×
@@ -192,7 +192,7 @@ function renderSelectedArtists() {
 
     const removeButton = chip.querySelector("button");
 
-    removeButton.addEventListener("click", function () {
+    chip.addEventListener("click", function () {
       chosenArtists.splice(index, 1);
       renderSelectedArtists();
     });

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>How to Play - Spurdle</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='tailwind-config.js') }}"></script>
+</head>
+
+<body class="bg-background-black text-white">
+    <nav class="flex items-center justify-between px-8 border-b border-white/10">
+        <a href="{{ url_for('main.welcome') }}" class="font-syne text-[35px] text-white cursor-pointer">
+            <span class="text-white">spu</span><span class="text-neon-green">rdle</span>
+        </a>
+
+        <div class="flex items-center gap-6 font-semibold text-sm">
+            <a href="{{ url_for('main.how_to_play') }}" class="text-neon-green transition hover:text-neon-green">How to Play</a>
+            <a href="{{ url_for('main.leaderboard') }}" class="text-white transition hover:text-neon-green">Leaderboard</a>
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('main.select_artists') }}" class="rounded-xl  text-white transition hover:text-neon-green">Artist Select</a>
+            <a href="{{ url_for('auth.logout') }}" class="text-white pr-4 py-2 transition hover:text-neon-green">Sign Out</a>
+            {% else %}
+            <a href="{{ url_for('auth.sign_in') }}" class="text-white transition hover:text-neon-green">Sign In</a>
+             <a href="{{ url_for('auth.sign_up') }}" class="rounded-xl pr-4 py-2 text-white transition hover:text-neon-green">Sign Up</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <main class="min-h-screen p-4">
+        <div class="mx-auto max-w-6xl">
+            <!-- HEADER -->
+            <section class="mt-1 rounded-[28px] border border-white/10 p-6">
+                <p class="text-sm uppercase tracking-[0.35em] text-neon-green/80">game guide</p>
+                <h2 class="mt-3 text-4xl font-bold md:text-5xl">How to Play</h2>
+                <p class="mt-4 max-w-2xl text-sm leading-6 text-white/70 md:text-base">
+                    Test how well you really know your favourite artists' music. Try guessing to see how long it takes you to get it right.
+                </p>
+            </section>
+            <div class="mt-4 grid gap-4 md:grid-cols-2">
+                <!-- LEFT COLUMN -->
+                <div class="flex flex-col gap-4">
+                    <div class="rounded-[28px] border border-white/10 bg-card-black p-6">
+                        <p class="text-sm uppercase tracking-[0.35em] text-neon-green/80">step 1</p>
+                        <h3 class="mt-2 text-xl font-bold">Select Your Artists</h3>
+                        <p class="mt-3 text-sm leading-6 text-white/70">
+                            Select between 1 to 10 artists. Each round, you will be given a random song from one of your selected artists to guess.
+                        </p>
+                        <p class="mt-3 text-sm leading-6 text-white/70">
+                            Only songs where your selected artist is the credited creator are included, however, songs where they are a feature on another artists' songs are not included.
+                        </p>
+                        <p class="mt-3 text-sm leading-6 text-white/70">
+                            You can change your artists at any time via the <span class="text-neon-green">Artist Select</span> option in the navigation bar, or after each round from the results pop-up.
+                        </p>
+                        <div class="mt-4 rounded-2xl border border-[#ff4a6e]/30 bg-[#ff4a6e1f] p-4">
+                            <p class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] mb-2">⚠ heads up</p>
+                            <p class="text-sm leading-6 text-white/70">
+                                If you select niche/small artists, the played songs may be inaccurate. Artists sharing a name with others may also have each others songs played. <br>
+                                To experience the game as intended try selecting artists that are more established.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="rounded-[28px] border border-white/10 bg-card-black p-6">
+                        <p class="text-sm uppercase tracking-[0.35em] text-neon-green/80">step 2</p>
+                        <h3 class="mt-2 text-xl font-bold">Guessing</h3>
+                        <p class="mt-3 text-sm leading-6 text-white/70">
+                            As you type a song name, an autofill dropdown will appear to help you just in case. You may occasionally see the same song name appear twice, however, any matching name will be treated as correct.
+                        </p>
+                        <p class="mt-3 text-sm leading-6 text-white/70">
+                            Guesses are case-insensitive ie., "GOD'S PLAN", "god's plan", and "gOd'S PlAn" are all treated as the same answer.
+                        </p>
+                        <p class="mt-3 text-sm leading-6 text-white/70">
+                            Misspelt guesses are counted as incorrect. You have a maximum of <span class="text-neon-green font-semibold">15 guesses</span> per round.
+                        </p>
+                    </div>
+                    <div class="rounded-[28px] border border-white/10 bg-card-black p-6">
+                        <p class="text-sm uppercase tracking-[0.35em] text-neon-green/80">important</p>
+                        <h3 class="mt-2 text-xl font-bold">Scores</h3>
+                        <p class="mt-3 text-sm leading-6 text-white/70">
+                            If you wish to give up, there is a <span class="text-neon-green font-semibold">"Give up?"</span> button at the bottom right of the game screen, underneath the <span class="text-neon-green font-semibold">Reveal Hint</span> button.
+                        </p>
+
+                        <div class="mt-4 rounded-2xl border border-[#ff4a6e]/30 bg-[#ff4a6e1f] p-4">
+                            <p class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] mb-2">can't think of it?</p>
+                            <p class="text-sm leading-6 text-white/70">
+                                Once a guess is made or a hint is used the game is added to your account as played. If you don't finish the round, it will still be counted. This prevents users from closing the game to avoid harming their game statistics when they don't know a song.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN -->
+                <div class="flex flex-col gap-4">
+                    <div class="rounded-[28px] border border-white/10 bg-card-black p-6">
+                        <p class="text-sm uppercase tracking-[0.35em] text-neon-green/80">scoring</p>
+                        <h3 class="mt-2 text-xl font-bold">Points</h3>
+                        <p class="mt-3 text-sm leading-6 text-white/70">
+                            You start each round with <span class="text-neon-green font-bold">100 points</span>. Every guess and hint will reduce your score. The fewer you use, the higher your score!
+                        </p>
+
+                        <div class="mt-4 rounded-[28px] border border-white/10 bg-[#131318] p-4 flex items-center justify-between">
+                            <p class="text-xs uppercase tracking-[0.35em] text-white">Each guess</p>
+                            <div class="rounded-full border border-[#ff4a6e]/50 bg-[#ff4a6e1f] p-2">
+                                <p class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] px-2">-3 points</p>
+                            </div>
+                        </div>
+
+                        <p class="mt-4 text-xs uppercase tracking-[0.35em] text-white/50">Hints (revealed in order)</p>
+
+                        <section class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-4">
+                            <div class="flex flex-col gap-4">
+                                <div class="flex items-center justify-between w-full">
+                                    <p class="text-xs uppercase tracking-[0.35em] text-white">Hint 1 - Release date</p>
+                                    <div class="rounded-full border border-[#ff4a6e]/50 bg-[#ff4a6e1f] p-2">
+                                        <p class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] px-2">-5 points</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-4">
+                            <div class="flex flex-col gap-4">
+                                <div class="flex items-center justify-between w-full">
+                                    <p class="text-xs uppercase tracking-[0.35em] text-white">Hint 2 - Album cover</p>
+                                    <div class="rounded-full border border-[#ff4a6e]/50 bg-[#ff4a6e1f] p-2">
+                                        <p class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] px-2">-10 points</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section id="section-3-hidden" class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-4">
+                            <div class="flex flex-col gap-4">
+                                <div class="flex items-center justify-between w-full">
+                                    <p class="text-xs uppercase tracking-[0.35em] text-white">Letter reveal</p>
+                                    <div class="rounded-full border border-[#ff4a6e]/50 bg-[#ff4a6e1f] p-2">
+                                        <p class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] px-2">-15 points</p>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-white/50 leading-5">
+                                    As you play and make guesses, the board updates showing which letters are in the song name and which are not.
+                                </p>
+                                <div class="flex items-center gap-3">
+                                    <div class="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
+                                        <span class="text-xs font-bold text-white/50">A</span>
+                                        <span class="text-xs text-white/40">Not used</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 rounded-full border border-neon-green/30 bg-neon-green/10 px-3 py-1.5">
+                                        <span class="text-xs font-bold text-neon-green">B</span>
+                                        <span class="text-xs text-neon-green/70">In song</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 rounded-full border border-[#ff4a6e]/30 bg-[#ff4a6e1f] px-3 py-1.5">
+                                        <span class="text-xs font-bold text-[#ff4a6e]">C</span>
+                                        <span class="text-xs text-[#ff4a6e]/70">Not in song</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-4">
+                            <div class="flex flex-col gap-4">
+                                <div class="flex items-center justify-between w-full">
+                                    <p class="text-xs uppercase tracking-[0.35em] text-white">Hint 4 - Album name</p>
+                                    <div class="rounded-full border border-[#ff4a6e]/50 bg-[#ff4a6e1f] p-2">
+                                        <p class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] px-2">-10 points</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="mt-1 rounded-[28px] border border-white/10 bg-[#131318] p-4">
+                            <div class="flex flex-col gap-4">
+                                <div class="flex items-center justify-between w-full">
+                                    <p class="text-xs uppercase tracking-[0.35em] text-white">Hint 5 - song snippet</p>
+                                    <div class="rounded-full border border-[#ff4a6e]/50 bg-[#ff4a6e1f] p-2">
+                                        <p class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] px-2">-15 points</p>
+                                    </div>
+                                </div>
+                                <p class="mt-2 text-xs text-white/50 leading-5">A random 2-second snippet of the song plays to help you identify it.</p>
+                            </div>
+                        </section>
+                        <div class="mt-4 rounded-2xl border border-[#ff4a6e]/30 bg-[#ff4a6e1f] p-4">
+                            <p class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] mb-2">⚠ Artists with limited songs</p>
+                            <p class="text-sm leading-6 text-white/70">
+                                If an artist has fewer than 10 songs as the main artist (ie, not a feature), you can still play the game as usual but your statistics won't be affected.<br>
+                                This prevents users from exploiting smaller artists to gain easy points.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <section class="mt-4 mb-8 rounded-[28px] border border-neon-green/20 bg-neon-green/5 p-6 text-center">
+                <p class="text-lg font-bold text-white">Good luck and enjoy!</p>
+                <p class="mt-1 text-sm text-white/50">You can always return to this page by pressing <span class="text-neon-green">How to Play</span> in the navigation bar.</p>
+                <a href="{{ url_for('main.select_artists') }}"
+                    class="inline-block mt-4 bg-neon-green/5 text-neon-green border border-neon-green/20 py-3 px-8 rounded-[28px] hover:bg-neon-green hover:text-black transition-all duration-200 font-semibold text-sm uppercase tracking-[0.35em]">
+                    Start Playing
+                </a>
+            </section>
+        </div>
+    </main>
+</body>
+
+</html>

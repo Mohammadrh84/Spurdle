@@ -13,18 +13,17 @@
     <script defer src="{{ url_for('static', filename='itunesAPIconfig.js') }}"></script>
 </head>
 
-<body class="bg-background-black bg-cover bg-center bg-no-repeat">
+<body class="bg-background-black bg-cover bg-center bg-no-repeat min-h-screen">
     <nav class="flex items-center justify-between px-8 border-b border-white/10">
-        <a href="{{ url_for('main.main_game') }}" class="font-syne text-[35px] text-white cursor-pointer">
+        <a href="{{ url_for('main.welcome') }}" class="font-syne text-[35px] text-white cursor-pointer">
             <span class="text-white">spu</span><span class="text-neon-green">rdle</span>
         </a>
 
         <div class="flex items-center gap-6 font-semibold text-sm">
+            <a href="{{ url_for('main.how_to_play') }}" class="text-white transition hover:text-neon-green">How to Play</a>
             <a href="{{ url_for('main.leaderboard') }}" class="text-white transition hover:text-neon-green">Leaderboard</a>
-            <a href="{{ url_for('auth.logout') }}" class="text-white transition hover:text-neon-green">Logout</a>
-            <a href="{{ url_for('main.select_artists') }}" class="rounded-full bg-neon-green px-4 py-2 text-black transition hover:scale-105">
-                Artist Select
-            </a>
+            <a href="{{ url_for('main.select_artists') }}" class="rounded-xl text-white transition hover:text-neon-green">Artist Select</a>
+            <a href="{{ url_for('auth.logout') }}" class="text-white pr-4 py-2 transition hover:text-neon-green">Logout</a>
         </div>
     </nav>
 
@@ -56,6 +55,8 @@
                         </div>
                     </section>
 
+                    <div id="small-artist-warning"></div>
+
                     <!-- GUESSING -->
                     <section class="mt-1 rounded-[28px] border border-white/10 guessing-background p-4 relative">
                         <div class="flex items-center justify-between w-full">
@@ -67,7 +68,7 @@
                             </div>
 
                             <button id="guess-button"
-                                class="shrink-0 bg-neon-green/5 text-neon-green border border-neon-green/20 py-3 px-4 rounded-[28px] hover:shadow-[0_0_10px_#3Dff6e] transition-all duration-20">
+                                class="shrink-0 bg-neon-green/5 text-neon-green border border-neon-green/20 py-3 px-4 rounded-[28px] hover:bg-neon-green hover:text-black transition-all duration-20">
                                 Guess
                             </button>
                         </div>
@@ -104,7 +105,7 @@
                             <div class="flex items-center justify-between w-full">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white">Release date</p>
                                 <div class="rounded-full border border-[#ff4a6e]/50 bg-[#ff4a6e1f] p-2">
-                                    <p class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] px-2">Not revealed</p>
+                                    <p class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] px-2">-5 points</p>
                                 </div>
                             </div>
                         </div>
@@ -130,7 +131,7 @@
                             <div class="flex items-center justify-between w-full">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white">Album cover</p>
                                 <div class="rounded-full border border-[#ff4a6e]/50 bg-[#ff4a6e1f] p-2">
-                                    <p class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] px-2">Not revealed</p>
+                                    <p class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] px-2">-10 points</p>
                                 </div>
                             </div>
                         </div>
@@ -159,7 +160,7 @@
                             <div class="flex items-center justify-between w-full">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white">Letter reveal</p>
                                 <div class="rounded-full border border-[#ff4a6e]/50 bg-[#ff4a6e1f] p-2">
-                                    <p class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] px-2">Not revealed</p>
+                                    <p class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] px-2">-15 points</p>
                                 </div>
                             </div>
                         </div>
@@ -212,7 +213,7 @@
                             <div class="flex items-center justify-between w-full">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white">Album name</p>
                                 <div class="rounded-full border border-[#ff4a6e]/50 bg-[#ff4a6e1f] p-2">
-                                    <p class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] px-2">Not revealed</p>
+                                    <p class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] px-2">-10 points</p>
                                 </div>
                             </div>
                         </div>
@@ -238,7 +239,7 @@
                             <div class="flex items-center justify-between w-full">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white">song snippet</p>
                                 <div class="rounded-full border border-[#ff4a6e]/50 bg-[#ff4a6e1f] p-2">
-                                    <p class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] px-2">Not revealed</p>
+                                    <p class="text-xs uppercase tracking-[0.35em] text-[#ff4a6e] px-2">-15 points</p>
                                 </div>
                             </div>
                         </div>
@@ -256,7 +257,7 @@
                             </div>
                             <div class="flex items-center justify-center w-full mt-4">
                                 <button id="play-snippet-button" onclick="playSnippet()"
-                                    class="flex items-center gap-3 bg-neon-green/5 text-neon-green border border-neon-green/20 py-3 px-6 rounded-[28px] hover:shadow-[0_0_10px_#3Dff6e] transition-all duration-200">
+                                    class="flex items-center gap-3 bg-neon-green/5 text-neon-green border border-neon-green/20 py-3 px-6 rounded-[28px] hover:bg-neon-green hover:text-black transition-all duration-200">
                                     <span id="play-label" class="text-xs uppercase tracking-[0.35em]">▶ Play snippet</span>
                                 </button>
                             </div>
@@ -265,7 +266,7 @@
 
                     <section>
                         <button onclick="NextHint()"
-                            class="mt-4 w-full bg-neon-green/5 text-neon-green border border-neon-green/20 py-3 px-4 rounded-[28px] hover:shadow-[0_0_10px_#3Dff6e] transition-all duration-20">
+                            class="mt-4 w-full bg-neon-green/5 text-neon-green border border-neon-green/20 py-3 px-4 rounded-[28px] hover:bg-neon-green hover:text-black transition-all duration-20">
                             Reveal Hint
                         </button>
                     </section>

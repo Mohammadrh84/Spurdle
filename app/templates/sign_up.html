@@ -6,16 +6,22 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="{{ url_for('static', filename='tailwind-config.js') }}"></script>
 </head>
-<body class="bg-[url('https://i.pinimg.com/736x/04/87/40/048740932b7755d6086e54e7c8f31d06.jpg')] backdrop-blur-[100px] bg-cover bg-center bg-no-repeat">
-<div class="min-h-screen flex flex-col items-center">
-    <h1 class="font-syne text-[35px] text-white mt-[125px]">
-        <a href="{{ url_for('main.welcome') }}" class="text-white">spu</a><a href="{{ url_for('main.welcome') }}" class="text-neon-green">rdle</a>
-    </h1>
-
-    <div class="w-full max-w-md bg-card-black border border-neon-green p-8 rounded-lg mt-10">
+<body class="bg-background-black text-white min-h-screen flex items-center justify-center ">
+<div class="min-h-screen items-center w-full max-w-[95vw] flex items-center justify-center gap-12"> 
+    <div class="w-1/2 h-[90vh] my-auto flex flex-col p-8 rounded-3xl relative overflow-hidden">
+        <div class="absolute inset-0 overflow-hidden rounded-3xl">
+            <div class="absolute inset-0 bg-[url('https://i.pinimg.com/736x/76/65/39/7665395d3552cdec5a025f32197d83c0.jpg')] -rotate-[249deg] scale-[1.5] bg-cover bg-center blur-xl"></div>
+        </div>
+        <div class="relative z-10">
+            <h1 class="font-syne text-[35px] text-white mt-[50px] cursor-pointer text-center">
+                <a href="{{ url_for('main.welcome') }}" class="text-white">spu</a><a href="{{ url_for('main.welcome') }}" class="text-neon-green">rdle</a>
+            </h1>
+        </div>
+    </div>
+    <div class="w-1/2 flex flex-col justify-center p-8">
         <div class="text-center text-white">
-            <h2 class="text-2xl font-bold">Sign Up</h2>
-            <h5 class="text-md text-placeholder-gray">Enter your details below to create your account.</h5>
+            <h2 class="text-4xl font-bold">Sign Up</h2>
+            <h5 class="text-lg text-placeholder-gray">Enter your details below to create your account.</h5>
         </div>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -28,22 +34,22 @@
             {{ form.hidden_tag() }}
 
             <div>
-                {{ form.username.label(class="text-sm tracking-[0.5px]") }}
-                {{ form.username(class="w-full bg-input-gray text-white border border-input-border-gray focus:outline-none focus:ring focus:ring-neon-green focus:ring-opacity-30 focus:border-neon-green py-2 px-4 rounded-lg placeholder:text-placeholder-gray", placeholder="Username") }}
+                {{ form.username.label(class="text-md tracking-[0.5px] mb-2 block") }}
+                {{ form.username(class="w-full bg-input-gray text-white border border-input-border-gray focus:outline-none focus:ring focus:ring-neon-green focus:ring-opacity-30 focus:border-neon-green py-2 px-4 rounded-full placeholder:text-placeholder-gray", placeholder="Username") }}
             </div>
 
             <div>
-                {{ form.password.label(class="text-sm tracking-[0.5px]") }}
-                {{ form.password(class="w-full bg-input-gray text-white border border-input-border-gray focus:outline-none focus:ring focus:ring-neon-green focus:ring-opacity-30 focus:border-neon-green py-2 px-4 rounded-lg placeholder:text-placeholder-gray", placeholder="•••••••••••") }}
+                {{ form.password.label(class="text-md tracking-[0.5px] mb-2 block") }}
+                {{ form.password(class="w-full bg-input-gray text-white border border-input-border-gray focus:outline-none focus:ring focus:ring-neon-green focus:ring-opacity-30 focus:border-neon-green py-2 px-4 rounded-full placeholder:text-placeholder-gray", placeholder="•••••••••••") }}
             </div>
 
             <div>
-                {{ form.confirm.label(class="text-sm tracking-[0.5px]") }}
-                {{ form.confirm(class="w-full bg-input-gray text-white border border-input-border-gray focus:outline-none focus:ring focus:ring-neon-green focus:ring-opacity-30 focus:border-neon-green py-2 px-4 rounded-lg placeholder:text-placeholder-gray", placeholder="•••••••••••") }}
+                {{ form.confirm.label(class="text-md tracking-[0.5px] mb-2 block") }}
+                {{ form.confirm(class="w-full bg-input-gray text-white border mb-[5vh] border-input-border-gray focus:outline-none focus:ring focus:ring-neon-green focus:ring-opacity-30 focus:border-neon-green py-2 px-4 rounded-full placeholder:text-placeholder-gray", placeholder="•••••••••••") }}
             </div>
 
             <div class="text-center">
-                {{ form.submit(class="bg-neon-green text-[#121219] font-bold py-2 px-6 rounded hover:scale-105 hover:shadow-[0_0_10px_#3Dff6e] transition-all duration-200") }}
+                {{ form.submit(class="bg-neon-green/5 text-neon-green border border-neon-green/30 text-md font-bold py-2 px-6 w-full rounded-full hover:bg-neon-green transition-all duration-200 hover:text-black cursor-pointer") }}
             </div>
         </form>
 

@@ -15,21 +15,17 @@
     <main class="max-w-6xl mx-auto px-4 py-6 md:px-8 lg:px-12">
         <header class="rounded-[28px] border border-white/10 bg-black/40 p-4 shadow-[0_0_30px_rgba(0,0,0,0.25)] md:p-6">
             <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <a href="{{ url_for('main.main_game') }}" class="inline-block">
+                <a href="{{ url_for('main.welcome') }}" class="inline-block">
                     <h1 class="font-syne text-5xl leading-none md:text-6xl">
                         <span class="text-white">spu</span><span class="text-neon-green">rdle</span>
                     </h1>
                 </a>
 
                 <nav class="flex flex-wrap items-center gap-3 text-sm font-semibold md:gap-6">
-                    <a href="{{ url_for('main.leaderboard') }}" class="transition hover:text-neon-green">Leaderboard</a>
-                    <a href="{{ url_for('auth.sign_in') }}" class="transition hover:text-neon-green">Login</a>
-                    <a
-                        href="{{ url_for('main.main_game') }}"
-                        class="rounded-xl bg-neon-green px-4 py-2 text-black transition hover:scale-105"
-                    >
-                        Game
-                    </a>
+                    <a href="{{ url_for('main.how_to_play') }}" class="text-white transition hover:text-neon-green">How to Play</a>
+                    <a href="{{ url_for('main.leaderboard') }}" class="text-white transition hover:text-neon-green">Leaderboard</a>
+                    <a href="{{ url_for('main.select_artists') }}" class="rounded-xl text-neon-green">Artist Select</a>
+                    <a href="{{ url_for('auth.logout') }}" class="text-white pr-4 py-2 transition hover:text-neon-green">Sign Out</a>
                 </nav>
             </div>
 
@@ -113,7 +109,7 @@
                     {% endif %}
                 {% endwith %}
 
-                <p id="artistLimitMessage" class="mt-5 hidden rounded-2xl border border-[#ff4a6e]/50 bg-[#ff4a6e1f] p-3 text-sm text-[#ff4a6e]">
+                <p id="artistLimitMessage" class="mt-5 hidden rounded-full border border-[#ff4a6e]/50 bg-[#ff4a6e1f] p-3 text-sm text-[#ff4a6e]">
                     You can only select up to {{ max_selected_artists }} artists.
                 </p>
 
@@ -142,7 +138,7 @@
                                 value="clear"
                                 data-skip-validation="true"
                                 formnovalidate
-                                class="hidden rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white/70 transition hover:border-[#ff4a6e] hover:text-[#ff4a6e]"
+                                class="hidden rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white/70 transition hover:border-[#ff4a6e] hover:text-[#ff4a6e] hover:bg-[#ff4a6e1f]"
                             >
                                 Clear selected artists
                             </button>
@@ -161,20 +157,10 @@
                         class="w-full rounded-full bg-white/10 px-4 py-3 font-bold text-white/40 cursor-not-allowed transition md:w-64"
                         disabled
                     >
-                        Save selected artists
+                        Start Game
                     </button>
 
-                    {% if selected_artists|length > 0 %}
-                        <a
-                            id="startGameLink"
-                            href="{{ url_for('main.main_game') }}"
-                            class="inline-flex justify-center rounded-full bg-neon-green px-5 py-2 text-sm font-bold text-black transition hover:scale-105"
-                        >
-                            Start game
-                        </a>
-                    {% endif %}
-
-                    <p id="saveArtistsMessage" class="text-center text-sm text-white/50">
+                    <p id="saveArtistsMessage" class="text-center text-sm text-[#ff4a6e]">
                         Select at least one artist to continue.
                     </p>
                 </div>
