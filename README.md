@@ -66,3 +66,13 @@ SPURDLE_DATABASE_URL=sqlite:///game.db
 ```
 
 The `.env` file is used to store local configuration values such as the Flask secret key and database URL.
+
+### 5. Set Up the Database
+
+Run the database migrations:
+
+```bash
+flask --app app db upgrade
+```
+
+This creates or updates the local database tables needed by the project.
