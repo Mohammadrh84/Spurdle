@@ -1,28 +1,37 @@
 import unittest
 from app import create_app
 from app.forms import SignupForm, LoginForm
+from app.config import TestConfig
 
 class TestForms(unittest.TestCase):
 
     def setUp(self):
-        self.app = create_app()
-        # disable CSRF for testing purposes
-        self.app.config['WTF_CSRF_ENABLED'] = False
+        self.app = create_app(TestConfig)
     
     def test_signup_form(self):
         with self.app.test_request_context():
             # ensure if requirements are met users can sign up
             valid_form = SignupForm(
-                username="user",
-                password="testpassword67",
-                confirm="testpassword67"
+                username="user123",
+                password="testpassword67#",
+                confirm="testpassword67#"
             )
 
             self.assertTrue(valid_form.validate())
 
+
+            # make sure usernames are constrained to character limit / requirement
+            bad_user_form = SignupForm(
+                username="user",
+                password="testpassword67#",
+                confirm="testpassword67#"
+            )
+
+            self.assertFalse(bad_user_form.validate())
+
             # testing violating validators (password too short)
             bad_password_form = SignupForm(
-                username="user",
+                username="user123",
                 password="test",
                 confirm="test"
             )
@@ -42,8 +51,8 @@ class TestForms(unittest.TestCase):
         with self.app.test_request_context():
             # validates as long as fields are not empty
             valid_form = LoginForm(
-                username="user",
-                password="testpassword67"
+                username="user123",
+                password="testpassword67#"
             )
 
             self.assertTrue(valid_form.validate())
