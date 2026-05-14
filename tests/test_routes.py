@@ -1,6 +1,7 @@
 import unittest
 from app.routes import (
     FALLBACK_ARTIST_IMAGE,
+    MAX_SELECTED_ARTISTS,
     filter_song_name,
     get_itunes_artist_id,
     clean_selected_artist,
@@ -141,30 +142,66 @@ class TestRoutes(unittest.TestCase):
 
         self.assertEqual(result["image"], FALLBACK_ARTIST_IMAGE)
 
-    def test_parse_selected_artists(self):
-        valid_selected_artists = json.dumps([
+    def test_parse_selected_artists_accepts_valid_artists(self):
+        selected_artists = json.dumps([
             {"id": "1", "name": "Test Artist 1"},
             {"id": "2", "name": "Test Artist 2"}
         ])
 
-        valid_result = parse_selected_artists(valid_selected_artists)
-        # ensure valid artist information is stored and retrieved properly
-        self.assertEqual(len(valid_result), 2)
-        self.assertEqual(valid_result[0]["id"], "1")
-        self.assertEqual(valid_result[1]["id"], "2")
+        result = parse_selected_artists(selected_artists)
 
-        # account for cases where ID may be null and there are duplicate artists
-        invalid_selected_artists = json.dumps([
-            {"id": "", "name": "Test Artist 1"},
-            {"id": "2", "name": "Test Artist 2"},
-            {"id": "2", "name": "Duplicate ID"}
+        self.assertEqual(len(result), 2)
+        self.assertEqual(result[0]["id"], "1")
+        self.assertEqual(result[1]["id"], "2")
+
+    def test_parse_selected_artists_removes_invalid_artist_entries(self):
+        selected_artists = json.dumps([
+            {"id": "", "name": "Missing ID"},
+            {"id": "2", "name": "Valid Artist"},
+            {"id": "3", "name": ""}
         ])
 
-        invalid_result = parse_selected_artists(invalid_selected_artists)
+        result = parse_selected_artists(selected_artists)
 
-        # ensure the invalid entries were removed and the correct one stays
-        self.assertEqual(len(invalid_result), 1)
-        self.assertEqual(invalid_result[0]["id"], "2")
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0]["id"], "2")
+        self.assertEqual(result[0]["name"], "Valid Artist")
+
+    def test_parse_selected_artists_removes_duplicate_artists(self):
+        selected_artists = json.dumps([
+            {"id": "2", "name": "Test Artist 2"},
+            {"id": "2", "name": "Duplicate Artist"}
+        ])
+
+        result = parse_selected_artists(selected_artists)
+
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0]["id"], "2")
+
+    def test_parse_selected_artists_returns_empty_list_for_invalid_json(self):
+        result = parse_selected_artists("not json")
+
+        self.assertEqual(result, [])
+
+    def test_parse_selected_artists_returns_empty_list_for_non_list_json(self):
+        selected_artists = json.dumps({
+            "id": "1",
+            "name": "Test Artist"
+        })
+
+        result = parse_selected_artists(selected_artists)
+
+        self.assertEqual(result, [])
+
+    def test_parse_selected_artists_limits_number_of_artists(self):
+        selected_artists = json.dumps([
+            {"id": str(i), "name": f"Artist {i}"}
+            for i in range(20)
+        ])
+
+        result = parse_selected_artists(selected_artists)
+
+        self.assertEqual(len(result), MAX_SELECTED_ARTISTS)
 
     def test_valid_song(self):
         valid_song = {
