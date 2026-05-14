@@ -89,6 +89,7 @@ class TestAuthSelenium(unittest.TestCase):
         )
 
         search_box.send_keys("Drake")
+
         # wait for api to respond to search
         artist_button = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((
@@ -102,6 +103,7 @@ class TestAuthSelenium(unittest.TestCase):
         save_button = WebDriverWait(driver, 5).until(
             EC.element_to_be_clickable((By.ID, "saveArtistsButton"))
         )
+
         # click the save / start game button
         save_button.click()
 
@@ -112,9 +114,24 @@ class TestAuthSelenium(unittest.TestCase):
 
     def test_signin(self):
         driver = self.driver
+
         self.signin("john532", "password67#")
+
         # after signing in the user should be taken to the select artists page
         self.assertIn("select_artists", driver.current_url)
+
+    def test_logout(self):
+        driver = self.driver
+
+        self.signin("logoutuser", "password67#")
+
+        driver.get("http://127.0.0.1:5000/logout")
+
+        WebDriverWait(driver, 5).until(
+            EC.url_contains("sign_in")
+        )
+
+        self.assertIn("sign_in", driver.current_url)
 
     def test_select_artist(self):
         driver = self.driver
@@ -136,6 +153,7 @@ class TestAuthSelenium(unittest.TestCase):
         reveal_button = WebDriverWait(driver, 5).until(
             EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), 'Reveal Hint')]"))
         )
+
         for _ in range(5):
             reveal_button.click()
 
@@ -143,21 +161,25 @@ class TestAuthSelenium(unittest.TestCase):
         give_up = WebDriverWait(driver, 5).until(
             EC.element_to_be_clickable((By.XPATH, "//a[contains(text(), 'Give up?')]"))
         )
+
         give_up.click()
 
         # ensure results are shown after user gives up
         WebDriverWait(driver, 5).until(
             EC.visibility_of_element_located((By.ID, "result-overlay"))
         )
+
         self.assertTrue(driver.find_element(By.ID, "result-overlay").is_displayed())
 
     def test_leaderboard(self):
         driver = self.driver
+
         self.signin("sampleuser", "password67#")
 
         # edit the stats of the user just created through the login helper function
         with self.app.app_context():
             user = User.query.filter_by(username="sampleuser").first()
+
             stats = Stats(
                 user_id=user.id,
                 total_points=250,
@@ -167,6 +189,7 @@ class TestAuthSelenium(unittest.TestCase):
                 current_streak=3,
                 best_streak=5
             )
+
             db.session.add(stats)
             db.session.commit()
 
@@ -178,12 +201,16 @@ class TestAuthSelenium(unittest.TestCase):
         )
 
         page_source = driver.page_source
+
         self.assertIn("sampleuser", page_source)
+
         # check if key stats are showing up on the leaderboard with the user:
         # points
         self.assertIn("250", page_source)
+
         # accuracy
         self.assertIn("75%", page_source)
+
         # games played
         self.assertIn("4", page_source)
 
