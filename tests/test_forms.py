@@ -40,6 +40,16 @@ class TestForms(unittest.TestCase):
 
             self.assertFalse(form.validate())
 
+    def test_signup_form_rejects_password_without_special_character(self):
+        with self.app.test_request_context():
+            form = SignupForm(
+                username="user123",
+                password="testpassword67",
+                confirm="testpassword67"
+            )
+
+            self.assertFalse(form.validate())
+
     def test_signup_form_rejects_empty_username(self):
         with self.app.test_request_context():
             form = SignupForm(
