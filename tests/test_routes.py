@@ -17,9 +17,28 @@ class TestRoutes(unittest.TestCase):
             "Hello"
         )
 
-        self.assertEqual(filter_song_name("Song {Demo}"),
+        self.assertEqual(
+            filter_song_name("Song {Demo}"),
             "Song"
-            )
+        )
+
+    def test_filter_song_name_removes_multiple_bracket_sections(self):
+        self.assertEqual(
+            filter_song_name("Song Name (Live) [Acoustic] {Demo}"),
+            "Song Name"
+        )
+
+    def test_filter_song_name_keeps_plain_song_name(self):
+        self.assertEqual(
+            filter_song_name("Normal Song"),
+            "Normal Song"
+        )
+
+    def test_filter_song_name_removes_extra_spaces(self):
+        self.assertEqual(
+            filter_song_name("Song   Name   (Remix)"),
+            "Song Name"
+        )
     
     @patch("app.routes.requests.get")
     def test_get_itunes_artist_id(self, mock_get):
@@ -124,7 +143,6 @@ class TestRoutes(unittest.TestCase):
         }
 
         self.assertFalse(is_valid_song(remix_song, 123))
-
 
 
 if __name__ == "__main__":
