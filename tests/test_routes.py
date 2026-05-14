@@ -39,10 +39,9 @@ class TestRoutes(unittest.TestCase):
             filter_song_name("Song   Name   (Remix)"),
             "Song Name"
         )
-    
+
     @patch("app.routes.requests.get")
-    def test_get_itunes_artist_id(self, mock_get):
-        # in the case of a valid response:
+    def test_get_itunes_artist_id_returns_artist_id_from_response(self, mock_get):
         mock_get.return_value.json.return_value = {
             "results": [
                 {"artistId": 909253}
@@ -53,13 +52,29 @@ class TestRoutes(unittest.TestCase):
 
         self.assertEqual(result, 909253)
 
-        # in the case that the artist is empty (technically should not be possible)
+    @patch("app.routes.requests.get")
+    def test_get_itunes_artist_id_returns_none_when_no_results(self, mock_get):
         mock_get.return_value.json.return_value = {
             "results": []
         }
 
         result = get_itunes_artist_id("Test Artist")
+
         self.assertIsNone(result)
+
+    @patch("app.routes.requests.get")
+    def test_get_itunes_artist_id_uses_existing_artist_id_without_api_call(self, mock_get):
+        result = get_itunes_artist_id("Test Artist", artist_id="12345")
+
+        self.assertEqual(result, "12345")
+        mock_get.assert_not_called()
+
+    @patch("app.routes.requests.get")
+    def test_get_itunes_artist_id_returns_none_for_empty_artist_name(self, mock_get):
+        result = get_itunes_artist_id("")
+
+        self.assertIsNone(result)
+        mock_get.assert_not_called()
 
     def test_clean_selected_artist(self):
         # test for cases where artist information may have whitespace
