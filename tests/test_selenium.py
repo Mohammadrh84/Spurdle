@@ -9,6 +9,9 @@ from app import create_app
 from werkzeug.security import generate_password_hash
 
 
+BASE_URL = "http://127.0.0.1:5000"
+
+
 class TestAuthSelenium(unittest.TestCase):
 
     def setUp(self):
@@ -20,12 +23,12 @@ class TestAuthSelenium(unittest.TestCase):
             db.create_all()
 
         self.driver = webdriver.Firefox()
-        self.driver.get("http://127.0.0.1:5000")
+        self.driver.get(BASE_URL)
 
     def test_signup(self):
         driver = self.driver
 
-        driver.get("http://127.0.0.1:5000/sign_up")
+        driver.get(f"{BASE_URL}/sign_up")
 
         driver.find_element(By.NAME, "username").send_keys("testuser")
         driver.find_element(By.NAME, "password").send_keys("testuserpw67#")
@@ -42,7 +45,7 @@ class TestAuthSelenium(unittest.TestCase):
     def test_invalid_signup_stays_on_signup_page(self):
         driver = self.driver
 
-        driver.get("http://127.0.0.1:5000/sign_up")
+        driver.get(f"{BASE_URL}/sign_up")
 
         driver.find_element(By.NAME, "username").send_keys("bad")
         driver.find_element(By.NAME, "password").send_keys("weak")
@@ -69,7 +72,7 @@ class TestAuthSelenium(unittest.TestCase):
 
         driver = self.driver
 
-        driver.get("http://127.0.0.1:5000/sign_in")
+        driver.get(f"{BASE_URL}/sign_in")
 
         driver.find_element(By.NAME, "username").send_keys(username)
         driver.find_element(By.NAME, "password").send_keys(password)
@@ -125,7 +128,7 @@ class TestAuthSelenium(unittest.TestCase):
 
         self.signin("logoutuser", "password67#")
 
-        driver.get("http://127.0.0.1:5000/logout")
+        driver.get(f"{BASE_URL}/logout")
 
         WebDriverWait(driver, 5).until(
             EC.url_contains("sign_in")
@@ -193,7 +196,7 @@ class TestAuthSelenium(unittest.TestCase):
             db.session.add(stats)
             db.session.commit()
 
-        driver.get("http://127.0.0.1:5000/leaderboard")
+        driver.get(f"{BASE_URL}/leaderboard")
 
         # check to make sure user appears on leaderboard
         WebDriverWait(driver, 5).until(
