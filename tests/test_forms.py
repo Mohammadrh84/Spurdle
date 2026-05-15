@@ -9,9 +9,9 @@ class TestForms(unittest.TestCase):
 
     def setUp(self):
         self.app = create_app(TestConfig)
-    
+
     # ensure a password following the validators passes
-    def test_valid_form(self):
+    def test_signup_form_accepts_valid_data(self):
         with self.app.test_request_context():
             form = SignupForm(
                 username="user123",
@@ -54,6 +54,7 @@ class TestForms(unittest.TestCase):
 
             self.assertFalse(form.validate())
 
+    # make sure empty usernames are rejected
     def test_empty_username(self):
         with self.app.test_request_context():
             form = SignupForm(
@@ -76,7 +77,7 @@ class TestForms(unittest.TestCase):
             self.assertFalse(form.validate())
 
     # make sure the login form accepts correct information
-    def test_valid_form(self):
+    def test_login_form_accepts_valid_data(self):
         with self.app.test_request_context():
             form = LoginForm(
                 username="user123",
@@ -85,6 +86,7 @@ class TestForms(unittest.TestCase):
 
             self.assertTrue(form.validate())
 
+    # make sure the login form rejects an empty password
     def test_empty_password(self):
         with self.app.test_request_context():
             form = LoginForm(
