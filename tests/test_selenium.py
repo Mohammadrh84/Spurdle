@@ -22,7 +22,7 @@ class TestAuthSelenium(unittest.TestCase):
             db.drop_all()
             db.create_all()
 
-        self.driver = webdriver.Firefox()
+        self.driver = webdriver.Chrome()
         self.driver.get(BASE_URL)
 
     def test_signup(self):
